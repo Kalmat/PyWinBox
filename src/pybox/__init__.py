@@ -70,9 +70,8 @@ class PyBox:
             self._box: Box = Box(0, 0, 0, 0)
             self._onQuery: Callable[[], Box] = onQuery
             self._onSet: Callable[[Box], None] = onSet
-            self._handle: Optional[int] = handle
             if handle is not None:
-                self._handle = _getHandle(handle)
+                self._handle: Optional[int] = _getHandle(handle)
                 try:
                     self._onQuery()
                 except NotImplementedError:
@@ -81,6 +80,17 @@ class PyBox:
                     self._onSet(self._box)
                 except NotImplementedError:
                     self._onSet = self.__onSet
+            else:
+                self._handle = None
+
+        def __onQuery(self):
+            if self._handle is not None:
+                self._box = _getWindowBox(self._handle)
+            return self._box
+
+        def __onSet(self, newBox: Box):
+            if self._handle is not None:
+                _moveResizeWindow(self._handle, newBox)
 
     elif sys.platform == "linux":
         from pybox._xlibcontainer import XWindow
@@ -92,12 +102,12 @@ class PyBox:
         def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: None = ...): ...
 
         def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: Optional[Union[int, XWindow]] = None):
+            from pybox._xlibcontainer import XWindow
             self._box: Box = Box(0, 0, 0, 0)
             self._onQuery: Callable[[], Box] = onQuery
             self._onSet: Callable[[Box], None] = onSet
-            self._handle = handle
             if handle is not None:
-                self._handle = _getHandle(handle)
+                self._handle: Optional[XWindow] = _getHandle(handle)
                 try:
                     self._onQuery()
                 except NotImplementedError:
@@ -106,6 +116,17 @@ class PyBox:
                     self._onSet(self._box)
                 except NotImplementedError:
                     self._onSet = self.__onSet
+            else:
+                self._handle = None
+
+        def __onQuery(self):
+            if self._handle is not None:
+                self._box = _getWindowBox(self._handle)
+            return self._box
+
+        def __onSet(self, newBox: Box):
+            if self._handle is not None:
+                _moveResizeWindow(self._handle, newBox)
 
     elif sys.platform == "darwin":
         import AppKit
@@ -117,12 +138,12 @@ class PyBox:
         def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: None = ...): ...
 
         def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: Optional[Union[Tuple[str, str], AppKit.NSWindow]] = None):
+            import AppKit
             self._box: Box = Box(0, 0, 0, 0)
             self._onQuery: Callable[[], Box] = onQuery
             self._onSet: Callable[[Box], None] = onSet
-            self._handle = handle
             if handle is not None:
-                self._handle = _getHandle(handle)
+                self._handle: Optional[Union[Tuple[str, str], AppKit.NSWindow]] = _getHandle(handle)
                 try:
                     self._onQuery()
                 except NotImplementedError:
@@ -131,6 +152,17 @@ class PyBox:
                     self._onSet(self._box)
                 except NotImplementedError:
                     self._onSet = self.__onSet
+            else:
+                self._handle = None
+
+        def __onQuery(self):
+            if self._handle is not None:
+                self._box = _getWindowBox(self._handle)
+            return self._box
+
+        def __onSet(self, newBox: Box):
+            if self._handle is not None:
+                _moveResizeWindow(self._handle, newBox)
 
     def __repr__(self):
         """Return a string of the constructor function call to create this Box object."""
@@ -150,15 +182,6 @@ class PyBox:
             self._box.width,
             self._box.height,
         )
-
-    def __onQuery(self):
-        if self._handle is not None:
-            self._box = _getWindowBox(self._handle)
-        return self._box
-
-    def __onSet(self, newBox: Box):
-        if self._handle is not None:
-            _moveResizeWindow(self._handle, newBox)
 
     @property
     def left(self) -> int:
