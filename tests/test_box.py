@@ -8,7 +8,7 @@ import sys
 import time
 
 import pybox
-import pywinctl  # type ignore[import]
+import pywinctl  # type: ignore[import]
 
 
 def test_basic():
