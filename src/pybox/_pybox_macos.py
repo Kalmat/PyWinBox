@@ -9,7 +9,7 @@ import sys
 assert sys.platform == "darwin"
 
 import subprocess
-from typing import NamedTuple, Union, Optional, Tuple
+from typing import NamedTuple, Union, Optional, Tuple, cast
 
 import AppKit
 
@@ -73,18 +73,19 @@ def _checkPermissions(activate: bool = False) -> bool:
 
 def _getWindowBox(handle: Union[macOSNSHandle, macOSCGHandle], flipValues: bool = False):
     if handle.isNSHandle:
-        if isinstance(handle, macOSNSHandle):
-            return _NSgetWindowBox(handle.window, flipValues)
+        handle = cast(macOSNSHandle, handle)
+        return _NSgetWindowBox(handle.window, flipValues)
     else:
-        if isinstance(handle, macOSCGHandle):
-            return _CGgetWindowBox(handle.appName, handle.windowTitle)
+        handle = cast(macOSCGHandle, handle)
+        return _CGgetWindowBox(handle.appName, handle.windowTitle)
 
 
 def _moveResizeWindow(handle: Union[macOSNSHandle, macOSCGHandle], newBox: Box, flipValues: bool = False):
-    isNSWindow = handle.isNSHandle
-    if isNSWindow:
+    if handle.isNSHandle:
+        handle = cast(macOSNSHandle, handle)
         _NSmoveResizeTo(handle.window, newBox, flipValues)
     else:
+        handle = cast(macOSCGHandle, handle)
         _CGmoveResizeTo(handle.appName, handle.windowTitle, newBox)
 
 
