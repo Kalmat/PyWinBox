@@ -165,6 +165,7 @@ def _NSgetWindowBox(window: AppKit.NSWindow, flipValues: bool = False) -> Box:
 
 
 def _NSmoveResizeTo(window: AppKit.NSWindow, newBox: Box, flipValues: bool = False):
+    newTop = newBox.top
     if flipValues:
-        newBox.top = _unflipTop(window, newBox)
-    window.setFrame_display_animate_(AppKit.NSMakeRect(newBox.left, newBox.top, newBox.width, newBox.height), True, True)
+        newTop = _unflipTop(window, newBox)
+    window.setFrame_display_animate_(AppKit.NSMakeRect(newBox.left, newTop, newBox.width, newBox.height), True, True)

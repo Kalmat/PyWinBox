@@ -143,7 +143,7 @@ class PyBox:
             self._onQuery: Callable[[], Box] = onQuery
             self._onSet: Callable[[Box], None] = onSet
             if handle is not None:
-                self._handle: Optional[macOSNSHandle, macOSCGHandle] = _getHandle(handle)
+                self._handle: Optional[Union[macOSNSHandle, macOSCGHandle]] = _getHandle(handle)
                 try:
                     self._onQuery()
                 except NotImplementedError:
