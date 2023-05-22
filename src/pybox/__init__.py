@@ -139,6 +139,7 @@ class PyBox:
 
         def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: Optional[Union[Tuple[str, str], AppKit.NSWindow]] = None):
             import AppKit
+            self._flipValues = False
             self._box: Box = Box(0, 0, 0, 0)
             self._onQuery: Callable[[], Box] = onQuery
             self._onSet: Callable[[Box], None] = onSet
@@ -157,12 +158,12 @@ class PyBox:
 
         def __onQuery(self):
             if self._handle is not None:
-                self._box = _getWindowBox(self._handle)
+                self._box = _getWindowBox(self._handle, self._flipValues)
             return self._box
 
         def __onSet(self, newBox: Box):
             if self._handle is not None:
-                _moveResizeWindow(self._handle, newBox)
+                _moveResizeWindow(self._handle, newBox, self._flipValues)
 
     def __repr__(self):
         """Return a string of the constructor function call to create this Box object."""
