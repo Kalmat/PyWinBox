@@ -26,7 +26,7 @@ setup(
     # download_url='https://github.com/Kalmat/PyWinCtl/archive/refs/tags/%s.tar.gz' % version,
     author='Kalmat',
     author_email='palookjones@gmail.com',
-    description=('Cross-Platform toolkit to handle rectangular areas and windows box'),
+    description=('Cross-Platform and multi-monitor toolkit to handle rectangular areas and windows box'),
     long_description=long_description,
     long_description_content_type="text/markdown",
     license='BSD 3',
@@ -48,8 +48,8 @@ setup(
             "types-python-xlib>=0.32"
         ]
     },
-    keywords="gui window control menu title name geometry size position move resize minimize maximize restore "
-             + "hide show activate raise lower close screen-size mouse-position",
+    keywords="left top right bottom size width height topleft bottomleft topright bottomright midtop midleft " +
+             "midbottom midright center centerx centery box rect boundingbox area",
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Win32 (MS Windows)',

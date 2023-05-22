@@ -9,7 +9,7 @@ import sys
 assert sys.platform == "darwin"
 
 import subprocess
-from typing import NamedTuple, Union, Optional, Tuple
+from typing import NamedTuple, Union, Optional
 
 import AppKit
 
