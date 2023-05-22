@@ -143,7 +143,7 @@ class PyBox:
             self._onQuery: Callable[[], Box] = onQuery
             self._onSet: Callable[[Box], None] = onSet
             if handle is not None:
-                self._handle: Optional[Union[Tuple[str, str], AppKit.NSWindow]] = _getHandle(handle)
+                self._handle: Optional[macOSNSHandle, macOSCGHandle] = _getHandle(handle)
                 try:
                     self._onQuery()
                 except NotImplementedError:
@@ -428,7 +428,7 @@ class PyBox:
 
 
 if sys.platform == "darwin":
-    from ._pybox_macos import (_getHandle, _getWindowBox, _moveResizeWindow)
+    from ._pybox_macos import (macOSNSHandle, macOSCGHandle, _getHandle, _getWindowBox, _moveResizeWindow)
 
 elif sys.platform == "win32":
     from ._pybox_win import (_getHandle, _getWindowBox, _moveResizeWindow)
