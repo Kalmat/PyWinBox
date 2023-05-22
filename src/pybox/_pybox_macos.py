@@ -72,11 +72,12 @@ def _checkPermissions(activate: bool = False) -> bool:
 
 
 def _getWindowBox(handle: Union[macOSNSHandle, macOSCGHandle], flipValues: bool = False):
-    isNSWindow = handle.isNSHandle
-    if isNSWindow:
-        return _NSgetWindowBox(handle.window, flipValues)
+    if handle.isNSHandle:
+        if isinstance(handle, macOSNSHandle):
+            return _NSgetWindowBox(handle.window, flipValues)
     else:
-        return _CGgetWindowBox(handle.appName, handle.windowTitle)
+        if isinstance(handle, macOSCGHandle):
+            return _CGgetWindowBox(handle.appName, handle.windowTitle)
 
 
 def _moveResizeWindow(handle: Union[macOSNSHandle, macOSCGHandle], newBox: Box, flipValues: bool = False):
