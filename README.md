@@ -1,13 +1,13 @@
 # PyWinBox
 
-Cross-Platform and multi-monitor module which allows to manage rectangular areas, 
-as well as windows areas, and all their properties.
+Cross-Platform and multi-monitor module which allows to manage window areas (position and
+size), as well as any rectangular area, and all their properties.
 
 **WARNING: Multi-monitor support is still experimental and not fully tested in macOS.**
 
 ## Rectangular areas
 
-You just need to instantiate the PyWinBox class, passing (or not) custom functions to be called when any property is 
+You just need to instantiate the PyWinBox class, passing custom callbacks to be called when any property is 
 queried (onQuery) or set (onSet).
 
     myPyWinBox = pywinbox.PyWinBox(onQuery=customOnQuery, onSet=customOnSet)
@@ -23,7 +23,7 @@ To manage window areas, you need to also pass the window handle when instantiati
 - macOS / own window: if you want to manage your own application window, you must pass NSWindow() object
 
 (Search for cross-platform modules if you need a cross-platform handle. For instance, you can get this kind of handles
-using PyWinCtl's getHandle() method)
+using PyWinCtl's getHandle(), getAppName() or title methods)
 
 In this case, you can use the default, built-in methods to manage the window when its properties are queried or set:
 
@@ -31,7 +31,8 @@ In this case, you can use the default, built-in methods to manage the window whe
 - onSet: Will move and/or resize the window when any property is set
 
 
-    myPyWinBox = pywinbox.PyWinBox(onQuery=pywinbox.onQuery, onSet=pywinbox.onSet, handle=windowHandle)
+
+    myPyWinBox = pywinbox.PyWinBox(onQuery=pywinbox.deafultOnQuery, onSet=pywinbox.defaultOnSet, handle=windowHandle)
 
 Of course, you can also define (and pass) your own custom functions if you need to perform other actions on these events.
 
@@ -106,3 +107,7 @@ Be sure you install all dependencies described on "docs/requirements.txt" by usi
 To test this module on your own system, cd to "tests" folder and run:
 
     python3 test_pywinbox.py
+
+For macOS NSWindow, you can also test using:
+
+    python3 test_MacNSBox.py
