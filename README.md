@@ -1,7 +1,9 @@
 # PyWinBox
 
+[![Type Checking](https://github.com/Kalmat/PyWinBox/actions/workflows/type-checking.yml/badge.svg)](https://github.com/Kalmat/PyWinBox/actions/workflows/type-checking.yml)
+
 Cross-Platform and multi-monitor module which allows to manage window areas (position and
-size), as well as any rectangular area, and all their properties.
+size) and all their properties, as well as any rectangular area.
 
 **WARNING: Multi-monitor support is still experimental and not fully tested in macOS.**
 
@@ -27,8 +29,8 @@ using PyWinCtl's getHandle(), getAppName() or title methods)
 
 In this case, you can use the default, built-in methods to manage the window when its properties are queried or set:
 
-- onQuery: Will update the window position and size values when any property is queried
-- onSet: Will move and/or resize the window when any property is set
+- defaultOnQuery: Will update the window position and size values when any property is queried
+- defaultOnSet: Will move and/or resize the window when any property is set
 
 
 
