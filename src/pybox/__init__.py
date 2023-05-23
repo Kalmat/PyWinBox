@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 from collections.abc import Callable
-from typing import Union, Tuple, overload, Optional, NamedTuple, cast
+from typing import Union, Tuple, overload, Optional, NamedTuple
 
 __all__ = [
     "version", "PyBox", "defaultOnQuery", "defaultOnSet", "Box", "Rect", "Point", "Size", "pointInBox"
@@ -138,7 +138,6 @@ class PyBox:
         def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: None = ...): ...
 
         def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: Optional[Union[Tuple[str, str], AppKit.NSWindow]] = None):
-            import AppKit
             self._flipValues = False
             self._box: Box = Box(0, 0, 0, 0)
             self._onQuery: Callable[[], Box] = onQuery

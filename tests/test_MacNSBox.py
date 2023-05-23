@@ -151,7 +151,7 @@ class Delegate(NSObject):
 
             # Test closing
             print("CLOSE")
-            myPyBox.close()
+            win.close()
 
     def windowWillClose_(self, aNotification: None):
         '''Called automatically when the window is closed'''
