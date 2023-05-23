@@ -7,7 +7,7 @@ from collections.abc import Callable
 from typing import Union, Tuple, overload, Optional, NamedTuple
 
 __all__ = [
-    "version", "PyBox", "defaultOnQuery", "defaultOnSet", "Box", "Rect", "Point", "Size", "pointInBox"
+    "version", "PyWinBox", "defaultOnQuery", "defaultOnSet", "Box", "Rect", "Point", "Size", "pointInBox"
 ]
 
 __version__ = "0.0.1"
@@ -15,7 +15,7 @@ __version__ = "0.0.1"
 
 def version(numberOnly: bool = True):
     """Returns the current version of PyWinCtl module, in the form ''x.x.xx'' as string"""
-    return ("" if numberOnly else "PyBox-")+__version__
+    return ("" if numberOnly else "PyWinBox-")+__version__
 
 
 class Box(NamedTuple):
@@ -56,7 +56,7 @@ def defaultOnSet(box: Box):
    raise NotImplementedError
 
 
-class PyBox:
+class PyWinBox:
 
     if sys.platform == "win32":
         @overload
@@ -437,4 +437,4 @@ elif sys.platform == "linux":
     from ._pywinbox_linux import (_getHandle, _getWindowBox, _moveResizeWindow)
 
 else:
-    raise NotImplementedError('PyBox currently does not support this platform. If you think you can help, please contribute! https://github.com/Kalmat/PyBox')
+    raise NotImplementedError('PyWinBox currently does not support this platform. If you think you can help, please contribute! https://github.com/Kalmat/PyWinBox')

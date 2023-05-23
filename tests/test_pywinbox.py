@@ -53,7 +53,7 @@ def test_basic():
         if sys.platform == "darwin" and pywinctl.version() < "0.1":
             handle = (npw.getAppName(), npw.title)
 
-        myPyBox = pywinbox.PyBox(onQuery=pywinbox.defaultOnQuery, onSet=pywinbox.defaultOnSet, handle=handle)
+        myPyBox = pywinbox.PyWinBox(onQuery=pywinbox.defaultOnQuery, onSet=pywinbox.defaultOnSet, handle=handle)
 
         myPyBox.left = 250
         time.sleep(timelap)
