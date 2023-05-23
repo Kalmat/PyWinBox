@@ -45,7 +45,8 @@ setup(
             "mypy>=0.990",
             "typing_extensions>=4.4.0",
             "types-pywin32>=305.0.0.3",
-            "types-python-xlib>=0.32"
+            "types-python-xlib>=0.32",
+            "pywinctl>=0.0.43"
         ]
     },
     keywords="left top right bottom size width height topleft bottomleft topright bottomright midtop midleft " +
