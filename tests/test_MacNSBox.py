@@ -17,7 +17,7 @@ from AppKit import (
     NSApp, NSObject, NSApplication, NSMakeRect, NSWindow, NSWindowStyleMaskTitled, NSWindowStyleMaskClosable,
     NSWindowStyleMaskMiniaturizable, NSWindowStyleMaskResizable, NSBackingStoreBuffered)
 
-import pywinctl  # type: ignore[import]
+import pywinctl
 
 
 # Cocoa prefers composition to inheritance. The members of an object's
