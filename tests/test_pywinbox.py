@@ -7,7 +7,7 @@ import subprocess
 import sys
 import time
 
-import pybox
+import pywinbox
 import pywinctl  # type: ignore[import]
 
 
@@ -53,7 +53,7 @@ def test_basic():
         if sys.platform == "darwin" and pywinctl.version() < "0.1":
             handle = (npw.getAppName(), npw.title)
 
-        myPyBox = pybox.PyBox(onQuery=pybox.defaultOnQuery, onSet=pybox.defaultOnSet, handle=handle)
+        myPyBox = pywinbox.PyBox(onQuery=pywinbox.defaultOnQuery, onSet=pywinbox.defaultOnSet, handle=handle)
 
         myPyBox.left = 250
         time.sleep(timelap)

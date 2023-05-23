@@ -7,12 +7,12 @@ scriptFolder = os.path.dirname(os.path.realpath(__file__))
 os.chdir(scriptFolder)
 
 # Find version info from module (without importing the module):
-with open("src/pybox/__init__.py", "r") as fileObj:
+with open("src/pywinbox/__init__.py", "r") as fileObj:
     match = re.search(
         r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', fileObj.read(), re.MULTILINE
     )
     if not match:
-        raise TypeError("'__version__' not found in 'src/pybox/__init__.py'")
+        raise TypeError("'__version__' not found in 'src/pywinbox/__init__.py'")
     version = match.group(1)
 
 # Use the README.md content for the long description:
@@ -20,9 +20,9 @@ with io.open("README.md", encoding="utf-8") as fileObj:
     long_description = fileObj.read()
 
 setup(
-    name='PyBox',
+    name='PyWinBox',
     version=version,
-    url='https://github.com/Kalmat/PyBox',
+    url='https://github.com/Kalmat/PyWinBox',
     # download_url='https://github.com/Kalmat/PyWinCtl/archive/refs/tags/%s.tar.gz' % version,
     author='Kalmat',
     author_email='palookjones@gmail.com',
@@ -32,7 +32,7 @@ setup(
     license='BSD 3',
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
-    package_data={"pybox": ["src/pybox/py.typed"]},
+    package_data={"pywinbox": ["src/pywinbox/py.typed"]},
     test_suite='tests',
     install_requires=[
         "pywin32>=302; sys_platform == 'win32'",

@@ -1,4 +1,4 @@
-# PyBox
+# PyWinBox
 
 Cross-Platform and multi-monitor module which allows to manage rectangular areas, 
 as well as windows areas, and all their properties.
@@ -7,10 +7,10 @@ as well as windows areas, and all their properties.
 
 ## Rectangular areas
 
-You just need to instantiate the PyBox class, passing (or not) custom functions to be called when any property is 
+You just need to instantiate the PyWinBox class, passing (or not) custom functions to be called when any property is 
 queried (onQuery) or set (onSet).
 
-    myPyBox = pybox.PyBox(onQuery=customOnQuery, onSet=customOnSet)
+    myPyWinBox = pywinbox.PyWinBox(onQuery=customOnQuery, onSet=customOnSet)
 
 
 ## Window areas
@@ -31,14 +31,14 @@ In this case, you can use the default, built-in methods to manage the window whe
 - onSet: Will move and/or resize the window when any property is set
 
 
-    myPyBox = pybox.PyBox(onQuery=pybox.onQuery, onSet=pybox.onSet, handle=windowHandle)
+    myPyWinBox = pywinbox.PyWinBox(onQuery=pywinbox.onQuery, onSet=pywinbox.onSet, handle=windowHandle)
 
 Of course, you can also define (and pass) your own custom functions if you need to perform other actions on these events.
 
-    myPyBox = pybox.PyBox(onQuery=customOnQuery, onSet=customOnSet, handle=windowHandle))
+    myPyWinBox = pywinbox.PyWinBox(onQuery=customOnQuery, onSet=customOnSet, handle=windowHandle))
 
 In this case, if your custom functions do not properly retrieve or set the actual window position and size, the 
-information contained in the PyBox class, and returned by all properties, will likely become obsolete.
+information contained in the PyWinBox class, and returned by all properties, will likely become obsolete.
 
 
 ## Class Properties
@@ -72,32 +72,32 @@ These are useful data structs (named tuples, actually) you can use to better man
 
 To install this module on your system, you can use pip: 
 
-    pip3 install pybox
+    pip3 install pywinbox
 
 or
 
-    python3 -m pip install pybox
+    python3 -m pip install pywinbox
 
-Alternatively, you can download the wheel file (.whl) available in the [Download page](https://pypi.org/project/PyBox/#files) and the [dist folder](https://github.com/Kalmat/PyBox/tree/master/dist), and run this (don't forget to replace 'x.x.xx' with proper version number):
+Alternatively, you can download the wheel file (.whl) available in the [Download page](https://pypi.org/project/PyWinBox/#files) and the [dist folder](https://github.com/Kalmat/PyWinBox/tree/master/dist), and run this (don't forget to replace 'x.x.xx' with proper version number):
 
-    pip install PyBox-x.x.xx-py3-none-any.whl
+    pip install PyWinBox-x.x.xx-py3-none-any.whl
 
 You may want to add `--force-reinstall` option to be sure you are installing the right dependencies version.
 
 Then, you can use it on your own projects just importing it:
 
-    import pybox
+    import pywinbox
 
 ## SUPPORT <a name="support"></a>
 
-In case you have a problem, comments or suggestions, do not hesitate to [open issues](https://github.com/Kalmat/PyBox/issues) on the [project homepage](https://github.com/Kalmat/PyBox)
+In case you have a problem, comments or suggestions, do not hesitate to [open issues](https://github.com/Kalmat/PyWinBox/issues) on the [project homepage](https://github.com/Kalmat/PyWinBox)
 
 ## USING THIS CODE <a name="using"></a>
 
 If you want to use this code or contribute, you can either:
 
-* Create a fork of the [repository](https://github.com/Kalmat/PyBox), or 
-* [Download the repository](https://github.com/Kalmat/PyBox/archive/refs/heads/master.zip), uncompress, and open it on your IDE of choice (e.g. PyCharm)
+* Create a fork of the [repository](https://github.com/Kalmat/PyWinBox), or 
+* [Download the repository](https://github.com/Kalmat/PyWinBox/archive/refs/heads/master.zip), uncompress, and open it on your IDE of choice (e.g. PyCharm)
 
 Be sure you install all dependencies described on "docs/requirements.txt" by using pip
 
@@ -105,4 +105,4 @@ Be sure you install all dependencies described on "docs/requirements.txt" by usi
 
 To test this module on your own system, cd to "tests" folder and run:
 
-    python3 test_pybox.py
+    python3 test_pywinbox.py

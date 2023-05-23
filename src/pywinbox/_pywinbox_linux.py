@@ -8,8 +8,8 @@ assert sys.platform == "linux"
 
 from typing import Union, Optional
 
-from pybox._xlibcontainer import defaultDisplay, defaultRootWindow, XWindow
-from pybox import Box
+from pywinbox._xlibcontainer import defaultDisplay, defaultRootWindow, XWindow
+from pywinbox import Box
 
 
 def _getHandle(handle: Union[int, XWindow]) -> Optional[XWindow]:

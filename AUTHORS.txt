@@ -1,3 +1,3 @@
-PyBox authors, contributors and maintainers:
+PyWinBox authors, contributors and maintainers:
 
 Kalmat https://github.com/Kalmat

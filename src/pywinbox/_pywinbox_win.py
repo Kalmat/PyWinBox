@@ -11,7 +11,7 @@ from typing import Union, Optional
 import ctypes
 import win32gui
 
-from pybox import Box
+from pywinbox import Box
 
 
 dpiAware = ctypes.windll.user32.GetAwarenessFromDpiAwarenessContext(ctypes.windll.user32.GetThreadDpiAwarenessContext())

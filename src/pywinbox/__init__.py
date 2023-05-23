@@ -93,7 +93,7 @@ class PyBox:
                 _moveResizeWindow(self._handle, newBox)
 
     elif sys.platform == "linux":
-        from pybox._xlibcontainer import XWindow
+        from pywinbox._xlibcontainer import XWindow
         @overload
         def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: int): ...
         @overload
@@ -102,7 +102,7 @@ class PyBox:
         def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: None = ...): ...
 
         def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: Optional[Union[int, XWindow]] = None):
-            from pybox._xlibcontainer import XWindow
+            from pywinbox._xlibcontainer import XWindow
             self._box: Box = Box(0, 0, 0, 0)
             self._onQuery: Callable[[], Box] = onQuery
             self._onSet: Callable[[Box], None] = onSet
@@ -428,13 +428,13 @@ class PyBox:
 
 
 if sys.platform == "darwin":
-    from ._pybox_macos import (macOSNSHandle, macOSCGHandle, _getHandle, _getWindowBox, _moveResizeWindow)
+    from ._pywinbox_macos import (macOSNSHandle, macOSCGHandle, _getHandle, _getWindowBox, _moveResizeWindow)
 
 elif sys.platform == "win32":
-    from ._pybox_win import (_getHandle, _getWindowBox, _moveResizeWindow)
+    from ._pywinbox_win import (_getHandle, _getWindowBox, _moveResizeWindow)
 
 elif sys.platform == "linux":
-    from ._pybox_linux import (_getHandle, _getWindowBox, _moveResizeWindow)
+    from ._pywinbox_linux import (_getHandle, _getWindowBox, _moveResizeWindow)
 
 else:
     raise NotImplementedError('PyBox currently does not support this platform. If you think you can help, please contribute! https://github.com/Kalmat/PyBox')
