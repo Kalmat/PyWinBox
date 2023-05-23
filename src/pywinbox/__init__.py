@@ -42,7 +42,7 @@ class Size(NamedTuple):
     height: int
 
 
-def pointInBox(x: int, y: int, box, Box):
+def pointInBox(x: int, y: int, box: Box):
     """Returns ``True`` if the ``(x, y)`` point is within the box described
     by ``(left, top, width, height)``."""
     return box.left <= x <= box.left + box.width and box.top <= y <= box.top + box.height
