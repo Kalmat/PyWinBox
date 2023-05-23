@@ -10,7 +10,7 @@ __all__ = [
     "version", "PyWinBox", "defaultOnQuery", "defaultOnSet", "Box", "Rect", "Point", "Size", "pointInBox"
 ]
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 
 def version(numberOnly: bool = True):
