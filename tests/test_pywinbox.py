@@ -51,7 +51,7 @@ def test_basic():
         assert not npw.isMaximized
 
         if sys.platform == "darwin":
-            myPyBox = pywinbox.PyWinBox(onQuery=pywinbox.defaultOnQuery, onSet=pywinbox.defaultOnSet, handle=(npw.getAppName(), npw.title))
+            myPyBox = pywinbox.PyWinBox(onQuery=pywinbox.defaultOnQuery, onSet=pywinbox.defaultOnSet, handle=(npw.getAppName(), npw.title or ""))
         else:
             myPyBox = pywinbox.PyWinBox(onQuery=pywinbox.defaultOnQuery, onSet=pywinbox.defaultOnSet, handle=npw.getHandle())
 
