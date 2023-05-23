@@ -52,8 +52,8 @@ def defaultOnQuery() -> Box:
     raise NotImplementedError
 
 
-def defaultOnSet(box: Box):
-   raise NotImplementedError
+def defaultOnSet(box: Box) -> None:
+    raise NotImplementedError
 
 
 class PyWinBox:
