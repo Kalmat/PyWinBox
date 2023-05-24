@@ -32,6 +32,7 @@ In this case, you can use the default, built-in methods to manage the window whe
 - defaultOnQuery: Will update the window position and size values when any property is queried
 - defaultOnSet: Will move and/or resize the window when any property is set
 
+.
 
 
     myPyWinBox = pywinbox.PyWinBox(onQuery=pywinbox.deafultOnQuery, onSet=pywinbox.defaultOnSet, handle=windowHandle)
