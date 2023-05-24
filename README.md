@@ -36,15 +36,26 @@ In this case, you can use the default, built-in methods to manage the window whe
 
 .
 
-
-    myPyWinBox = pywinbox.PyWinBox(onQuery=pywinbox.deafultOnQuery, onSet=pywinbox.defaultOnSet, handle=windowHandle)
+    myPyWinBox = pywinbox.PyWinBox(onQuery=pywinbox.defaultOnQuery, onSet=pywinbox.defaultOnSet, handle=windowHandle)
 
 Of course, you can also define (and pass) your own custom functions if you need to perform other actions on these events.
 
     myPyWinBox = pywinbox.PyWinBox(onQuery=customOnQuery, onSet=customOnSet, handle=windowHandle))
 
 In this case, if your custom functions do not properly retrieve or set the actual window position and size, the 
-information contained in the PyWinBox class, and returned by all properties, will likely become obsolete.
+information contained in the PyWinBox class, and returned by all properties, will likely become obsolete. So, you can
+use both in your custom callback:
+
+    def customOnQuery():
+        # ... do your stuff ...
+        currBox = pywinbox.defaultOnQuery()
+        # ... do more stuff if needed ...
+        return currBox
+
+    def customOnSet(newBox: Box):
+        # ... do your stuff ...
+        pywinbox.defaultOnSet(newBox)
+        # ... do more stuff if needed ...
 
 
 ## Class Properties

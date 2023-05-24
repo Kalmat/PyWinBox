@@ -49,120 +49,89 @@ def pointInBox(x: int, y: int, box: Box):
 
 
 def defaultOnQuery() -> Box:
+    """
+    Default function to invoke when any property is queried.
+
+    :return: current window position and size, as a Box Struct (x, y, width, height)
+    """
     raise NotImplementedError
 
 
 def defaultOnSet(box: Box) -> None:
+    """
+    Default function to invoke when any property is set.
+
+    :param: target window position and/or size as a Box Struct (x, y, width, height)
+    """
     raise NotImplementedError
 
 
 class PyWinBox:
 
-    if sys.platform == "win32":
-        @overload
-        def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: int): ...
-        @overload
-        def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: str): ...
-        @overload
-        def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: None = ...): ...
+    def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle=None):
+        """
+        Class to access all area/window box properties.
 
-        def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: Optional[Union[int, str]] = None):
-            self._box: Box = Box(0, 0, 0, 0)
-            self._onQuery: Callable[[], Box] = onQuery
-            self._onSet: Callable[[Box], None] = onSet
-            if handle is not None:
-                self._handle: Optional[int] = _getHandle(handle)
-                try:
-                    self._onQuery()
-                except NotImplementedError:
-                    self._onQuery = self.__onQuery
-                try:
-                    self._onSet(self._box)
-                except NotImplementedError:
-                    self._onSet = self.__onSet
-            else:
-                self._handle = None
 
-        def __onQuery(self):
-            if self._handle is not None:
-                self._box = _getWindowBox(self._handle)
-            return self._box
+        ## Rectangular areas
 
-        def __onSet(self, newBox: Box):
-            if self._handle is not None:
-                _moveResizeWindow(self._handle, newBox)
+        You just need to instantiate the PyWinBox class, passing custom callbacks to be called when any property is
+        queried (onQuery) or set (onSet).
 
-    elif sys.platform == "linux":
-        from pywinbox._xlibcontainer import XWindow
-        @overload
-        def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: int): ...
-        @overload
-        def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: XWindow): ...
-        @overload
-        def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: None = ...): ...
+            myPyWinBox = pywinbox.PyWinBox(onQuery=customOnQuery, onSet=customOnSet)
 
-        def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: Optional[Union[int, XWindow]] = None):
-            from pywinbox._xlibcontainer import XWindow
-            self._box: Box = Box(0, 0, 0, 0)
-            self._onQuery: Callable[[], Box] = onQuery
-            self._onSet: Callable[[Box], None] = onSet
-            if handle is not None:
-                self._handle: Optional[XWindow] = _getHandle(handle)
-                try:
-                    self._onQuery()
-                except NotImplementedError:
-                    self._onQuery = self.__onQuery
-                try:
-                    self._onSet(self._box)
-                except NotImplementedError:
-                    self._onSet = self.__onSet
-            else:
-                self._handle = None
 
-        def __onQuery(self):
-            if self._handle is not None:
-                self._box = _getWindowBox(self._handle)
-            return self._box
+        ## Window areas
 
-        def __onSet(self, newBox: Box):
-            if self._handle is not None:
-                _moveResizeWindow(self._handle, newBox)
+        To manage window areas, you need to also pass the window handle when instantiating the class, in the following formats:
 
-    elif sys.platform == "darwin":
-        import AppKit
-        @overload
-        def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: Tuple[str, str]): ...
-        @overload
-        def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: AppKit.NSWindow): ...
-        @overload
-        def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: None = ...): ...
+        - MS-Windows: integer (window id) or str (as returned by, e.g., PyQt's winId() method)
+        - Linux: integer (window id) or X-Window object
+        - macOS / foreign window: in case you want to manage a window from another application, you must pass target app and window names, as a tuple of strings (appName, windowTitle)
+        - macOS / own window: if you want to manage your own application window, you must pass NSWindow() object
 
-        def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle: Optional[Union[Tuple[str, str], AppKit.NSWindow]] = None):
-            self._flipValues = False
-            self._box: Box = Box(0, 0, 0, 0)
-            self._onQuery: Callable[[], Box] = onQuery
-            self._onSet: Callable[[Box], None] = onSet
-            if handle is not None:
-                self._handle: Optional[Union[macOSNSHandle, macOSCGHandle]] = _getHandle(handle)
-                try:
-                    self._onQuery()
-                except NotImplementedError:
-                    self._onQuery = self.__onQuery
-                try:
-                    self._onSet(self._box)
-                except NotImplementedError:
-                    self._onSet = self.__onSet
-            else:
-                self._handle = None
+        (Search for cross-platform modules if you need a cross-platform handle. For instance, you can get this kind of handles
+        using PyWinCtl's getHandle(), getAppName() or title methods)
 
-        def __onQuery(self):
-            if self._handle is not None:
-                self._box = _getWindowBox(self._handle, self._flipValues)
-            return self._box
+        In this case, you can use the default, built-in methods to manage the window when its properties are queried or set:
 
-        def __onSet(self, newBox: Box):
-            if self._handle is not None:
-                _moveResizeWindow(self._handle, newBox, self._flipValues)
+        - defaultOnQuery: Will update the window position and size values when any property is queried
+        - defaultOnSet: Will move and/or resize the window when any property is set
+
+            myPyWinBox = pywinbox.PyWinBox(onQuery=pywinbox.deafultOnQuery, onSet=pywinbox.defaultOnSet, handle=windowHandle)
+
+        Of course, you can also define (and pass) your own custom functions if you need to perform other actions on these events.
+
+            myPyWinBox = pywinbox.PyWinBox(onQuery=customOnQuery, onSet=customOnSet, handle=windowHandle))
+
+        In this case, if your custom functions do not properly retrieve or set the actual window position and size, the
+        information contained in the PyWinBox class, and returned by all properties, will likely become obsolete.
+        """
+
+        self._box: Box = Box(0, 0, 0, 0)
+        self._onQuery: Callable[[], Box] = onQuery
+        self._onSet: Callable[[Box], None] = onSet
+        if handle is not None:
+            self._handle = _getHandle(handle)
+            try:
+                self._onQuery()
+            except NotImplementedError:
+                self._onQuery = self.__onQuery
+            try:
+                self._onSet(self._box)
+            except NotImplementedError:
+                self._onSet = self.__onSet
+        else:
+            self._handle = None
+
+    def __onQuery(self) -> Box:
+        if self._handle is not None:
+            self._box = _getWindowBox(self._handle)
+        return self._box
+
+    def __onSet(self, newBox: Box):
+        if self._handle is not None:
+            _moveResizeWindow(self._handle, newBox)
 
     def __repr__(self):
         """Return a string of the constructor function call to create this Box object."""
