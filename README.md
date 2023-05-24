@@ -1,6 +1,8 @@
 # PyWinBox
 
 [![Type Checking](https://github.com/Kalmat/PyWinBox/actions/workflows/type-checking.yml/badge.svg)](https://github.com/Kalmat/PyWinBox/actions/workflows/type-checking.yml)
+[![PyPI version](https://badge.fury.io/py/PyWinBox.svg)](https://badge.fury.io/py/PyWinBox)
+
 
 Cross-Platform and multi-monitor module which allows to manage window areas (position and
 size) and all their properties, as well as any rectangular area.
