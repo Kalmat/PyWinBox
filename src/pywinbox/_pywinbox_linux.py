@@ -12,7 +12,7 @@ from pywinbox._xlibcontainer import defaultDisplay, defaultRootWindow, XWindow, 
 from pywinbox import Box
 
 _ewmhWin: Optional[EwmhWindow] = None
-_net_extents: list[int] = []
+_net_extents: Optional[list[int]] = []
 
 
 def _getHandle(handle: Union[int, XWindow]) -> Optional[XWindow]:
@@ -47,7 +47,7 @@ def _getWindowBox(handle: XWindow) -> Box:
     if _ewmhWin is None:
         _ewmhWin = EwmhWindow(handle.id)
         _net_extents = _ewmhWin._getNetFrameExtents()
-    if len(_net_extents) >= 4:
+    if _net_extents and len(_net_extents) >= 4:
         x = x - _net_extents[0]
         y = y - _net_extents[2]
         w = w + _net_extents[0] + _net_extents[1]
