@@ -33,7 +33,7 @@ def _getHandle(handle: Union[int, str]) -> Optional[int]:
 
 def _getWindowBox(handle: int) -> Box:
     x, y, r, b = win32gui.GetWindowRect(handle)
-    return Box(x, y, abs(r - x), abs(b - y))
+    return Box(x, y, abs(r - abs(x)), abs(b - abs(y)))
 
 
 def _moveResizeWindow(handle: int, newBox: Box):

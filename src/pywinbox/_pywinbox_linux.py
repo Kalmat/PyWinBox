@@ -8,7 +8,8 @@ assert sys.platform == "linux"
 
 from typing import Union, Optional
 
-from pywinbox._xlibcontainer import defaultDisplay, defaultRootWindow, XWindow, EwmhWindow
+from ewmhlib import  defaultDisplay, defaultRootWindow, EwmhWindow
+from Xlib.xobject.drawable import Window as XWindow
 from pywinbox import Box
 
 _ewmhWin: Optional[EwmhWindow] = None
