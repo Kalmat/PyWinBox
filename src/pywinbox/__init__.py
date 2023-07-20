@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import sys
 from collections.abc import Callable
-from typing import Union, Tuple, overload, Optional, NamedTuple
+from typing import Union, Tuple, NamedTuple
 
 __all__ = [
     "version", "PyWinBox", "defaultOnQuery", "defaultOnSet", "Box", "Rect", "Point", "Size", "pointInBox"
 ]
 
-__version__ = "0.0.8"
+__version__ = "0.0.9"
 
 
 def version(numberOnly: bool = True):
