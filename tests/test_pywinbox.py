@@ -6,7 +6,6 @@ from __future__ import annotations
 import subprocess
 import sys
 import time
-from typing import Tuple, cast
 
 import pywinbox
 import pywinctl
@@ -51,9 +50,9 @@ def test_basic():
         assert not npw.isMaximized
 
         if sys.platform == "darwin":
-            myPyBox = pywinbox.PyWinBox(onQuery=pywinbox.defaultOnQuery, onSet=pywinbox.defaultOnSet, handle=(npw.getAppName(), npw.title or ""))
+            myPyBox = pywinbox.PyWinBox(onQuery=None, onSet=None, handle=(npw.getAppName(), npw.title or ""))
         else:
-            myPyBox = pywinbox.PyWinBox(onQuery=pywinbox.defaultOnQuery, onSet=pywinbox.defaultOnSet, handle=npw.getHandle())
+            myPyBox = pywinbox.PyWinBox(onQuery=None, onSet=None, handle=npw.getHandle())
 
         print("INIT", npw.box, npw.rect)
 
