@@ -8,25 +8,22 @@ assert sys.platform == "linux"
 
 from typing import Union, Optional
 
-from ewmhlib import  defaultDisplay, defaultRootWindow, EwmhWindow
+from ewmhlib import EwmhWindow
 from Xlib.xobject.drawable import Window as XWindow
 from pywinbox import Box
 
-_ewmhWin: Optional[EwmhWindow] = None
-_net_extents: Optional[list[int]] = []
 
-
-def _getHandle(handle: Union[int, XWindow]) -> Optional[XWindow]:
+def _getHandle(handle: Union[int, XWindow]) -> Optional[EwmhWindow]:
     newHandle = None
     if isinstance(handle, int):
-        newHandle = defaultDisplay.create_resource_object('window', handle)
+        newHandle = EwmhWindow(handle)
     elif isinstance(handle, XWindow):
-        newHandle = handle
+        newHandle = EwmhWindow(handle.id)
     return newHandle
 
 
-def _getWindowBox(handle: XWindow) -> Box:
-    win = handle
+def _getWindowBox(handle: EwmhWindow) -> Box:
+    win = handle.xWindow
     geom = win.get_geometry()
     x = geom.x
     y = geom.y
@@ -43,11 +40,7 @@ def _getWindowBox(handle: XWindow) -> Box:
             break
         win = parent
     # Thanks to roym899 (https://github.com/roym899) for his HELP!!!!
-    global _ewmhWin
-    global _net_extents
-    if _ewmhWin is None:
-        _ewmhWin = EwmhWindow(handle.id)
-        _net_extents = _ewmhWin._getNetFrameExtents()
+    _net_extents = handle._getNetFrameExtents()
     if _net_extents and len(_net_extents) >= 4:
         x = x - _net_extents[0]
         y = y - _net_extents[2]
@@ -56,8 +49,8 @@ def _getWindowBox(handle: XWindow) -> Box:
     return Box(x, y, w, h)
 
 
-def _moveResizeWindow(handle: XWindow, newBox: Box):
+def _moveResizeWindow(handle: EwmhWindow, newBox: Box):
     newLeft = max(0, newBox.left)  # Xlib won't accept negative positions
     newTop = max(0, newBox.top)
-    defaultRootWindow.setMoveResize(winId=handle.id, x=newLeft, y=newTop, width=newBox.width, height=newBox.height, userAction=True)
+    handle.rootWindow.root.setMoveResize(winId=handle.id, x=newLeft, y=newTop, width=newBox.width, height=newBox.height, userAction=True)
     # handle.configure(x=newLeft, y=newTop, width=newBox.width, height=newBox.height)

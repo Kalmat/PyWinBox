@@ -4,17 +4,17 @@ from __future__ import annotations
 
 import sys
 from collections.abc import Callable
-from typing import Union, Tuple, NamedTuple
+from typing import Union, Tuple, NamedTuple, Optional
 
 __all__ = [
-    "version", "PyWinBox", "defaultOnQuery", "defaultOnSet", "Box", "Rect", "Point", "Size", "pointInBox"
+    "version", "PyWinBox", "Box", "Rect", "Point", "Size", "pointInBox"
 ]
 
-__version__ = "0.0.9"
+__version__ = "0.1"
 
 
 def version(numberOnly: bool = True):
-    """Returns the current version of PyWinCtl module, in the form ''x.x.xx'' as string"""
+    """Returns the current version of PyWinBox module, in the form ''x.x.xx'' as string"""
     return ("" if numberOnly else "PyWinBox-")+__version__
 
 
@@ -48,27 +48,9 @@ def pointInBox(x: int, y: int, box: Box):
     return box.left <= x <= box.left + box.width and box.top <= y <= box.top + box.height
 
 
-def defaultOnQuery() -> Box:
-    """
-    Default function to invoke when any property is queried.
-
-    :return: current window position and size, as a Box Struct (x, y, width, height)
-    """
-    raise NotImplementedError
-
-
-def defaultOnSet(box: Box) -> None:
-    """
-    Default function to invoke when any property is set.
-
-    :param: target window position and/or size as a Box Struct (x, y, width, height)
-    """
-    raise NotImplementedError
-
-
 class PyWinBox:
 
-    def __init__(self, onQuery: Callable[[], Box], onSet: Callable[[Box], None], handle=None):
+    def __init__(self, onQuery: Optional[Callable[[], Box]] = None, onSet: Optional[Callable[[Box], None]] = None, handle=None):
         """
         Class to access all area/window box properties.
 
@@ -93,12 +75,13 @@ class PyWinBox:
         (Search for cross-platform modules if you need a cross-platform handle. For instance, you can get this kind of handles
         using PyWinCtl's getHandle(), getAppName() or title methods)
 
-        In this case, you can use the default, built-in methods to manage the window when its properties are queried or set:
+        In this case, you can use the default, built-in methods to manage the window when its properties are queried or set
+        (passing them as None):
 
-        - defaultOnQuery: Will update the window position and size values when any property is queried
-        - defaultOnSet: Will move and/or resize the window when any property is set
+        - default OnQuery: Will update the window position and size values when any property is queried
+        - default OnSet: Will move and/or resize the window when any property is set
 
-            myPyWinBox = pywinbox.PyWinBox(onQuery=pywinbox.deafultOnQuery, onSet=pywinbox.defaultOnSet, handle=windowHandle)
+            myPyWinBox = pywinbox.PyWinBox(onQuery=None, onSet=None, handle=windowHandle)
 
         Of course, you can also define (and pass) your own custom functions if you need to perform other actions on these events.
 
@@ -107,29 +90,17 @@ class PyWinBox:
         In this case, if your custom functions do not properly retrieve or set the actual window position and size, the
         information contained in the PyWinBox class, and returned by all properties, will likely become obsolete.
         """
-
         self._box: Box = Box(0, 0, 0, 0)
-        self._onQuery: Callable[[], Box] = onQuery
-        self._onSet: Callable[[Box], None] = onSet
-        if handle is not None:
-            self._handle = _getHandle(handle)
-            try:
-                self._onQuery()
-            except NotImplementedError:
-                self._onQuery = self.__onQuery
-            try:
-                self._onSet(self._box)
-            except NotImplementedError:
-                self._onSet = self.__onSet
-        else:
-            self._handle = None
+        self._onQuery: Callable[[], Box] = onQuery or self.onQuery
+        self._onSet: Callable[[Box], None] = onSet or self.onSet
+        self._handle = _getHandle(handle) if handle is not None else None
 
-    def __onQuery(self) -> Box:
+    def onQuery(self) -> Box:
         if self._handle is not None:
             self._box = _getWindowBox(self._handle)
         return self._box
 
-    def __onSet(self, newBox: Box):
+    def onSet(self, newBox: Box):
         if self._handle is not None:
             _moveResizeWindow(self._handle, newBox)
 
@@ -397,7 +368,7 @@ class PyWinBox:
 
 
 if sys.platform == "darwin":
-    from ._pywinbox_macos import (macOSNSHandle, macOSCGHandle, _getHandle, _getWindowBox, _moveResizeWindow)
+    from ._pywinbox_macos import (_getHandle, _getWindowBox, _moveResizeWindow)
 
 elif sys.platform == "win32":
     from ._pywinbox_win import (_getHandle, _getWindowBox, _moveResizeWindow)

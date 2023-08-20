@@ -14,8 +14,10 @@ size) and all their properties, as well as any rectangular area.
 You just need to instantiate the PyWinBox class, passing custom callbacks to be called when any property is 
 queried (onQuery) or set (onSet).
 
-    myPyWinBox = pywinbox.PyWinBox(onQuery=customOnQuery, onSet=customOnSet)
+    myBox = pywinbox.PyWinBox(onQuery=customOnQuery, onSet=customOnSet)
 
+For rectangular areas, it is necessary to pass custom (not default) callbacks which actually manage the box struct values, 
+or the struct will be empty and useless.
 
 ## Window areas
 
@@ -29,33 +31,32 @@ To manage window areas, you need to also pass the window handle when instantiati
 (Search for cross-platform modules if you need a cross-platform handle. For instance, you can get this kind of handles
 using PyWinCtl's getHandle(), getAppName() or title methods)
 
-In this case, you can use the default, built-in methods to manage the window when its properties are queried or set:
+In this case, you can use the default methods to manage the window when its properties are queried or set 
+(passing them as None):
 
-- defaultOnQuery: Will update the window position and size values when any property is queried
-- defaultOnSet: Will move and/or resize the window when any property is set
+- default OnQuery: Will update the window position and size values when any property is queried
+- default OnSet: Will move and/or resize the window when any property is set
 
 .
 
-    myPyWinBox = pywinbox.PyWinBox(onQuery=pywinbox.defaultOnQuery, onSet=pywinbox.defaultOnSet, handle=windowHandle)
+    myBox = pywinbox.PyWinBox(onQuery=None, onSet=None, handle=windowHandle)
 
 Of course, you can also define (and pass) your own custom functions if you need to perform other actions on these events.
-
-    myPyWinBox = pywinbox.PyWinBox(onQuery=customOnQuery, onSet=customOnSet, handle=windowHandle))
 
 In this case, if your custom functions do not properly retrieve or set the actual window position and size, the 
 information contained in the PyWinBox class, and returned by all properties, will likely become obsolete. So, you can
 use both in your custom callback:
 
     def customOnQuery():
+        currBox = myBox.onQuery()  # This will retrieve the current window's box
         # ... do your stuff ...
-        currBox = pywinbox.defaultOnQuery()
-        # ... do more stuff if needed ...
         return currBox
 
     def customOnSet(newBox: Box):
+        myBox.OnSet(newBox)  # This will actually move/resize the window
         # ... do your stuff ...
-        pywinbox.defaultOnSet(newBox)
-        # ... do more stuff if needed ...
+
+    myBox = pywinbox.PyWinBox(onQuery=customOnQuery, onSet=customOnSet, handle=windowHandle)
 
 
 ## Class Properties

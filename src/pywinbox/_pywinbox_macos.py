@@ -16,25 +16,25 @@ import AppKit
 from pywinbox import Box
 
 
-class macOSNSHandle(NamedTuple):
+class _macOSNSHandle(NamedTuple):
     isNSHandle: bool
     window: AppKit.NSWindow
 
 
-class macOSCGHandle(NamedTuple):
+class _macOSCGHandle(NamedTuple):
     isNSHandle: bool
     appName: str
     windowTitle: str
 
 
-def _getHandle(handle) -> Optional[Union[macOSCGHandle, macOSNSHandle]]:
+def _getHandle(handle) -> Optional[Union[_macOSCGHandle, _macOSNSHandle]]:
     newHandle = None
     if isinstance(handle, tuple):
         app, window = handle
         if isinstance(app, str) and isinstance(window, str):
-            newHandle = macOSCGHandle(False, app, window)
+            newHandle = _macOSCGHandle(False, app, window)
     elif isinstance(handle, AppKit.NSWindow):
-        newHandle = macOSNSHandle(True, handle)
+        newHandle = _macOSNSHandle(True, handle)
     return newHandle
 
 
@@ -71,21 +71,21 @@ def _checkPermissions(activate: bool = False) -> bool:
     return ret == "true"
 
 
-def _getWindowBox(handle: Union[macOSNSHandle, macOSCGHandle], flipValues: bool = False):
+def _getWindowBox(handle: Union[_macOSNSHandle, _macOSCGHandle], flipValues: bool = False):
     if handle.isNSHandle:
-        handle = cast(macOSNSHandle, handle)
+        handle = cast(_macOSNSHandle, handle)
         return _NSgetWindowBox(handle.window, flipValues)
     else:
-        handle = cast(macOSCGHandle, handle)
+        handle = cast(_macOSCGHandle, handle)
         return _CGgetWindowBox(handle.appName, handle.windowTitle)
 
 
-def _moveResizeWindow(handle: Union[macOSNSHandle, macOSCGHandle], newBox: Box, flipValues: bool = False):
+def _moveResizeWindow(handle: Union[_macOSNSHandle, _macOSCGHandle], newBox: Box, flipValues: bool = False):
     if handle.isNSHandle:
-        handle = cast(macOSNSHandle, handle)
+        handle = cast(_macOSNSHandle, handle)
         _NSmoveResizeTo(handle.window, newBox, flipValues)
     else:
-        handle = cast(macOSCGHandle, handle)
+        handle = cast(_macOSCGHandle, handle)
         _CGmoveResizeTo(handle.appName, handle.windowTitle, newBox)
 
 
