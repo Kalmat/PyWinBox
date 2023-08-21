@@ -31,13 +31,12 @@ To manage window areas, you need to also pass the window handle when instantiati
 (Search for cross-platform modules if you need a cross-platform handle. For instance, you can get this kind of handles
 using PyWinCtl's getHandle(), getAppName() or title methods)
 
-In this case, you can use the default methods to manage the window when its properties are queried or set 
-(passing them as None):
+In this case, you can use the default methods to manage the window when its properties are queried or set: 
 
 - default OnQuery: Will update the window position and size values when any property is queried
 - default OnSet: Will move and/or resize the window when any property is set
 
-.
+To use default methods, just pass them as None, like this: 
 
     myBox = pywinbox.PyWinBox(onQuery=None, onSet=None, handle=windowHandle)
 
