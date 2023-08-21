@@ -53,7 +53,7 @@ use both in your custom callback:
         return currBox
 
     def customOnSet(newBox: Box):
-        myBox.OnSet(newBox)  # This will actually move/resize the window
+        myBox.onSet(newBox)  # This will actually move/resize the window
         # ... do your stuff ...
 
     myBox = pywinbox.PyWinBox(onQuery=customOnQuery, onSet=customOnSet, handle=windowHandle)

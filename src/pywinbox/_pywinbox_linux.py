@@ -52,5 +52,5 @@ def _getWindowBox(handle: EwmhWindow) -> Box:
 def _moveResizeWindow(handle: EwmhWindow, newBox: Box):
     newLeft = max(0, newBox.left)  # Xlib won't accept negative positions
     newTop = max(0, newBox.top)
-    handle.rootWindow.root.setMoveResize(winId=handle.id, x=newLeft, y=newTop, width=newBox.width, height=newBox.height, userAction=True)
+    handle.rootWindow.setMoveResize(winId=handle.id, x=newLeft, y=newTop, width=newBox.width, height=newBox.height, userAction=True)
     # handle.configure(x=newLeft, y=newTop, width=newBox.width, height=newBox.height)

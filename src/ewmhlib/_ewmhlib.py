@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from __future__ import annotations
 
 import ctypes
@@ -23,9 +25,8 @@ import Xlib.ext
 import Xlib.xobject
 from Xlib.xobject.drawable import Window as XWindow
 
-from .Props import *
-from .Structs import *
-from .Structs import _XWindowAttributes
+from .Props import Root, DesktopLayout, Window, WindowType, State, StateAction, MoveResize, DataFormat, Mode, HintAction
+from .Structs import DisplaysInfo, ScreensInfo, WmHints, Aspect, WmNormalHints, _XWindowAttributes
 
 
 defaultDisplay = Xlib.display.Display()
@@ -422,9 +423,7 @@ class RootWindow:
         :return: tuple of integers (width, height) or None if it couldn't be retrieved
         """
         ret: Optional[Xlib.protocol.request.GetProperty] = self.getProperty(Root.DESKTOP_GEOMETRY)
-        print("RET", ret)
         res: Optional[Union[List[int], List[str]]] = getPropertyValue(ret, display=self.display)
-        print("RES", res)
         if res is not None:
             res = cast(List[int], res)
         return res
