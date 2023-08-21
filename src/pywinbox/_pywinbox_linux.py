@@ -23,6 +23,7 @@ def _getHandle(handle: Union[int, XWindow]) -> Optional[EwmhWindow]:
 
 
 def _getWindowBox(handle: EwmhWindow) -> Box:
+    # https://stackoverflow.com/questions/12775136/get-window-position-and-size-in-python-with-xlib
     win = handle.xWindow
     geom = win.get_geometry()
     x = geom.x
@@ -52,5 +53,5 @@ def _getWindowBox(handle: EwmhWindow) -> Box:
 def _moveResizeWindow(handle: EwmhWindow, newBox: Box):
     newLeft = max(0, newBox.left)  # Xlib won't accept negative positions
     newTop = max(0, newBox.top)
-    handle.rootWindow.setMoveResize(winId=handle.id, x=newLeft, y=newTop, width=newBox.width, height=newBox.height, userAction=True)
+    handle.setMoveResize(x=newLeft, y=newTop, width=newBox.width, height=newBox.height, userAction=True)
     # handle.configure(x=newLeft, y=newTop, width=newBox.width, height=newBox.height)

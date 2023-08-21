@@ -51,7 +51,7 @@ class Delegate(NSObject):
             if win:
                 print("ACTIVE WINDOW:", win.title)
 
-                myPyBox = pywinbox.PyWinBox(onQuery=pywinbox.defaultOnQuery, onSet=pywinbox.defaultOnSet, handle=win.getHandle())
+                myPyBox = pywinbox.PyWinBox(onQuery=None, onSet=None, handle=win.getHandle())
 
             else:
                 print("NO ACTIVE WINDOW FOUND")
