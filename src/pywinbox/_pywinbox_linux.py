@@ -41,12 +41,12 @@ def _getWindowBox(handle: EwmhWindow) -> Box:
             break
         win = parent
     # Thanks to roym899 (https://github.com/roym899) for his HELP!!!!
-    _net_extents = handle._getNetFrameExtents()
-    if _net_extents and len(_net_extents) >= 4:
-        x = x - _net_extents[0]
-        y = y - _net_extents[2]
-        w = w + _net_extents[0] + _net_extents[1]
-        h = h + _net_extents[2] + _net_extents[3]
+    # _net_extents = handle._getNetFrameExtents()
+    # if _net_extents and len(_net_extents) >= 4:
+    #     x = x - _net_extents[0]
+    #     y = y - _net_extents[2]
+    #     w = w + _net_extents[0] + _net_extents[1]
+    #     h = h + _net_extents[2] + _net_extents[3]
     return Box(x, y, w, h)
 
 
