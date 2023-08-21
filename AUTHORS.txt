@@ -1,4 +1,4 @@
 PyWinBox authors, contributors and maintainers:
 
 Kalmat https://github.com/Kalmat
-Leonard Bruns https://github.com/roym899
+elraymond (https://github.com/elraymond)
