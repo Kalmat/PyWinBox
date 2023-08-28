@@ -32,7 +32,7 @@ setup(
     license='BSD 3',
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
-    package_data={"pywinbox": ["py.typed"]},
+    package_data={"pywinbox": ["py.typed"], "ewmhlib": ["py.typed"]},
     test_suite='tests',
     install_requires=[
         "pywin32>=302; sys_platform == 'win32'",

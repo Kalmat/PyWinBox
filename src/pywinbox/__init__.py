@@ -8,7 +8,7 @@ __all__ = [
 __version__ = "0.4"
 
 
-def version(numberOnly: bool = True):
+def version(numberOnly: bool = True) -> str:
     """Returns the current version of PyWinBox module, in the form ''x.x.xx'' as string"""
     return ("" if numberOnly else "PyWinBox-")+__version__
 
