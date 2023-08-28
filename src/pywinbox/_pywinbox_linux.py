@@ -10,7 +10,7 @@ from typing import Union, Optional
 
 from ewmhlib import EwmhWindow
 from Xlib.xobject.drawable import Window as XWindow
-from pywinbox import Box
+from ._main import Box
 
 
 def _getHandle(handle: Union[int, XWindow]) -> Optional[EwmhWindow]:
@@ -24,30 +24,9 @@ def _getHandle(handle: Union[int, XWindow]) -> Optional[EwmhWindow]:
 
 def _getWindowBox(handle: EwmhWindow) -> Box:
     # https://stackoverflow.com/questions/12775136/get-window-position-and-size-in-python-with-xlib
-    win = handle.xWindow
-    geom = win.get_geometry()
-    x = geom.x
-    y = geom.y
-    w = geom.width
-    h = geom.height
-    while True:
-        parent = win.query_tree().parent
-        if not parent or not isinstance(parent, XWindow):
-            break
-        pgeom = parent.get_geometry()
-        x += pgeom.x
-        y += pgeom.y
-        if parent.id == 0:
-            break
-        win = parent
-    # Thanks to roym899 (https://github.com/roym899) for his HELP!!!!
-    # _net_extents = handle._getNetFrameExtents()
-    # if _net_extents and len(_net_extents) >= 4:
-    #     x = x - _net_extents[0]
-    #     y = y - _net_extents[2]
-    #     w = w + _net_extents[0] + _net_extents[1]
-    #     h = h + _net_extents[2] + _net_extents[3]
-    return Box(x, y, w, h)
+    geom = handle.xWindow.get_geometry()
+    pos = handle.root.translate_coords(handle.id, 0, 0)
+    return Box(pos.x, pos.y, geom.width, geom.height)
 
 
 def _moveResizeWindow(handle: EwmhWindow, newBox: Box):

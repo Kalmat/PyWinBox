@@ -13,7 +13,7 @@ from typing import NamedTuple, Union, Optional, cast
 
 import AppKit
 
-from pywinbox import Box
+from ._main import Box
 
 
 class _macOSNSHandle(NamedTuple):
