@@ -7,8 +7,6 @@
 Cross-Platform and multi-monitor module which allows to manage window areas (position and
 size) and all their properties, as well as any rectangular area.
 
-**WARNING: Multi-monitor support is still experimental and not fully tested in macOS.**
-
 ## Rectangular areas
 
 You just need to instantiate the PyWinBox class, passing custom callbacks to be called when any property is 

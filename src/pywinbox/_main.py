@@ -83,22 +83,33 @@ class PyWinBox:
         In this case, if your custom functions do not properly retrieve or set the actual window position and size, the
         information contained in the PyWinBox class, and returned by all properties, will likely become obsolete.
 
-        It can raise ValueError if no parameters are passed.
+        It can raise ValueError if no parameters or not valid window handle are passed
         """
-        self._box: Box = Box(0, 0, 0, 0)
-        if handle is not None:
-            self._handle = _getHandle(handle) if handle is not None else None
-        elif onSet is None and onQuery is None:
+        self._handle = _getHandle(handle) if handle is not None else None
+        if self._handle is None and (onSet is None or onQuery is None):
             raise ValueError
         self._onQuery: Callable[[], Box] = onQuery or self.onQuery
         self._onSet: Callable[[Box], None] = onSet or self.onSet
+        self._box: Box = Box(0, 0, 0, 0)
 
     def onQuery(self) -> Box:
+        """
+        Default method to retrieve current window position and size values when a property is queried.
+        It requires to pass valid window handle when instantiating the main class (PyWinBox class)
+
+        :return: window Box struct (x, y, width, height)
+        """
         if self._handle is not None:
             self._box = _getWindowBox(self._handle)
         return self._box
 
     def onSet(self, newBox: Box):
+        """
+        Default method to actually place / resize the window when a property is changed.
+        It requires to pass valid window handle when instantiating the main class (PyWinBox class)
+
+        :param newBox: target position and or size in Box struct format (x, y, width, height)
+        """
         if self._handle is not None:
             _moveResizeWindow(self._handle, newBox)
 
@@ -114,7 +125,7 @@ class PyWinBox:
 
     def __str__(self):
         """Return a string representation of this Box object."""
-        return "(%s, %s, w=%s, h=%s)" % (
+        return "(%s, %s, %s, %s)" % (
             self._box.left,
             self._box.top,
             self._box.width,

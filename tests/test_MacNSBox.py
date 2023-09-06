@@ -50,7 +50,6 @@ class Delegate(NSObject):
 
             if win:
                 print("ACTIVE WINDOW:", win.title)
-
                 myPyBox = pywinbox.PyWinBox(onQuery=None, onSet=None, handle=win.getHandle())
 
             else:
@@ -58,6 +57,8 @@ class Delegate(NSObject):
                 return
 
             timelap = 0.3
+
+            print("INIT", myPyBox.box, myPyBox._handle.window.frame())
 
             print("MOVE left = 200", myPyBox.box, myPyBox.rect)
             myPyBox.left = 200
@@ -175,7 +176,7 @@ def demo():
     a.setDelegate_(delegate)
 
     # Now we can start to create the window ...
-    frame = NSMakeRect(400, 400, 250, 100)
+    frame = NSMakeRect(400, 400, 250, 128)
     # (Don't worry about these parameters for the moment. They just specify
     # the type of window, its size and position etc)
     mask = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable

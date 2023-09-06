@@ -154,7 +154,7 @@ def _unflipTop(window: AppKit.NSWindow, box: Box) -> int:
 
 def _NSgetWindowBox(window: AppKit.NSWindow, flipValues: bool = False) -> Box:
     # frame = window.frame()
-    frame = window.screen().convertRectToBacking_(window.frame())
+    frame = window.frame()
     x = int(frame.origin.x)
     y = int(frame.origin.y)
     w = int(frame.size.width)
