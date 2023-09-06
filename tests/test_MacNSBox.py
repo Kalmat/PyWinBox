@@ -6,6 +6,7 @@
 # We need to import the relevant object definitions from PyObjC
 
 import sys
+from typing import cast
 
 import pywinbox
 
@@ -57,8 +58,6 @@ class Delegate(NSObject):
                 return
 
             timelap = 0.3
-
-            print("INIT", myPyBox.box, myPyBox._handle.window.frame())
 
             print("MOVE left = 200", myPyBox.box, myPyBox.rect)
             myPyBox.left = 200
