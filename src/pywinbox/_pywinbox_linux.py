@@ -3,17 +3,17 @@
 from __future__ import annotations
 
 import sys
-
 assert sys.platform == "linux"
 
 from typing import Union, Optional
 
-from ewmhlib import EwmhWindow
 from Xlib.xobject.drawable import Window as XWindow
 from ._main import Box
+from ewmhlib import EwmhWindow
 
 
 def _getHandle(handle: Union[int, XWindow]) -> Optional[EwmhWindow]:
+
     newHandle = None
     if isinstance(handle, int):
         newHandle = EwmhWindow(handle)
@@ -34,3 +34,4 @@ def _moveResizeWindow(handle: EwmhWindow, newBox: Box):
     newTop = max(0, newBox.top)
     handle.setMoveResize(x=newLeft, y=newTop, width=newBox.width, height=newBox.height, userAction=True)
     # handle.configure(x=newLeft, y=newTop, width=newBox.width, height=newBox.height)
+
