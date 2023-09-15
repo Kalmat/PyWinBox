@@ -141,10 +141,10 @@ def test_basic():
         print(npw.box, npw.rect)
         assert npw.height == 500
 
-        myPyBox.size = (301, 301)
+        myPyBox.size = (551, 501)
         time.sleep(timelap)
         print(npw.box, npw.rect)
-        assert npw.size == (301, 301)
+        assert npw.size == (551, 501)
 
         # Test closing
         npw.close()
