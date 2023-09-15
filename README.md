@@ -114,7 +114,7 @@ If you want to use this code or contribute, you can either:
 * Create a fork of the [repository](https://github.com/Kalmat/PyWinBox), or 
 * [Download the repository](https://github.com/Kalmat/PyWinBox/archive/refs/heads/master.zip), uncompress, and open it on your IDE of choice (e.g. PyCharm)
 
-Be sure you install all dependencies described on "docs/requirements.txt" by using pip
+Be sure you install all dependencies described on "requirements.txt" by using pip
 
 ## TEST <a name="test"></a>
 
