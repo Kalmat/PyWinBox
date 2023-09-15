@@ -373,14 +373,15 @@ class PyWinBox:
         self._box = Box(self._box.left, value - (self._box.height // 2), self._box.width, self._box.height)
         self._onSet(self._box)
 
+
 if sys.platform == "darwin":
-    from _pywinbox_macos import (_getHandle, _getWindowBox, _moveResizeWindow)
+    from ._pywinbox_macos import (_getHandle, _getWindowBox, _moveResizeWindow)
 
 elif sys.platform == "win32":
-    from _pywinbox_win import (_getHandle, _getWindowBox, _moveResizeWindow)
+    from ._pywinbox_win import (_getHandle, _getWindowBox, _moveResizeWindow)
 
 elif sys.platform == "linux":
-    from _pywinbox_linux import (_getHandle, _getWindowBox, _moveResizeWindow)
+    from ._pywinbox_linux import (_getHandle, _getWindowBox, _moveResizeWindow)
 
 else:
     raise NotImplementedError('PyWinBox currently does not support this platform. If you think you can help, please contribute! https://github.com/Kalmat/PyWinBox')
