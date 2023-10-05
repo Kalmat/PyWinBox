@@ -14,7 +14,11 @@ import win32gui
 from ._main import Box
 
 
-dpiAware = ctypes.windll.user32.GetAwarenessFromDpiAwarenessContext(ctypes.windll.user32.GetThreadDpiAwarenessContext())
+try:
+    dpiAware = ctypes.windll.user32.GetAwarenessFromDpiAwarenessContext(ctypes.windll.user32.GetThreadDpiAwarenessContext())
+except AttributeError:  # Windows server does not implement GetAwarenessFromDpiAwarenessContext
+    dpiAware = 0
+
 if dpiAware == 0:
     ctypes.windll.shcore.SetProcessDpiAwareness(2)
 
