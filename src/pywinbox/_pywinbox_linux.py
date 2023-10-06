@@ -30,7 +30,7 @@ def _getWindowBox(handle: EwmhWindow) -> Box:
     # check if application uses special title bar (a.k.a. GTK HeaderBar)
     # see: https://docs.gtk.org/gtk4/class.HeaderBar.html
     # if it has HeaderBar (e.g., gedit):
-    #   top left will be top left including extra space GTK
+    #   top left will be top left including extra space (shadows?)
     #   in that case, we subtract gtk extents to the right box
     # if it doesn't (e.g., gvim):
     #   top left will be top left of client window (i.e., excluding the title bar)
