@@ -37,17 +37,28 @@ def _getWindowBox(handle: EwmhWindow) -> Box:
     #   in that case, we add the title bar to get the right box
 
     _net_extents = handle._getNetFrameExtents()
-    if _net_extents and len(_net_extents) >= 4:  # this means it has no GTK HeaderBar
+    _gtk_extents = handle._getGtkFrameExtents()
+    if _net_extents and len(_net_extents) >= 4:
+        # this means it has no GTK HeaderBar
         x = pos.x - int(_net_extents[0])
         y = pos.y - int(_net_extents[2])
         w = geom.width + int(_net_extents[0]) + int(_net_extents[1])
         h = geom.height + int(_net_extents[2]) + int(_net_extents[3])
-    else:
+    elif _gtk_extents and len(_gtk_extents) >= 4:
+        # this means there is a GTK HeaderBar
         _gtk_extents = handle._getGtkFrameExtents()
         x = pos.x + int(_gtk_extents[0])
         y = pos.y + int(_gtk_extents[2])
         w = geom.width - int(_gtk_extents[0]) - int(_gtk_extents[1])
         h = geom.height - int(_gtk_extents[2]) - int(_gtk_extents[3])
+    else:
+        # something else: best guess is to trust pos and geom from above
+        # NOTE: if you have this case and are not getting the expected result,
+        #   please open an issue: https://github.com/Kalmat/PyWinBox/issues/new
+        x = pos.x
+        y = pos.y
+        w = geom.width
+        h = geom.height
     return Box(x, y, w, h)
 
 
