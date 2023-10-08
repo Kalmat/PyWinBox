@@ -9,6 +9,7 @@ from typing import Union, Optional
 
 from Xlib.xobject.drawable import Window as XWindow
 from ._main import Box
+
 from ewmhlib import EwmhWindow
 
 
@@ -63,8 +64,26 @@ def _getWindowBox(handle: EwmhWindow) -> Box:
 
 
 def _moveResizeWindow(handle: EwmhWindow, newBox: Box):
-    newLeft = max(0, newBox.left)  # Xlib won't accept negative positions
-    newTop = max(0, newBox.top)
-    handle.setMoveResize(x=newLeft, y=newTop, width=newBox.width, height=newBox.height, userAction=True)
-    # handle.configure(x=newLeft, y=newTop, width=newBox.width, height=newBox.height)
+    _net_extents = handle._getNetFrameExtents()
+    _gtk_extents = handle._getGtkFrameExtents()
+    if _net_extents and len(_net_extents) >= 4:
+        # this means it has no GTK HeaderBar
+        newLeft = newBox.left
+        newTop = newBox.top
+        newWidth = newBox.width
+        newHeight = newBox.height - int(_net_extents[2]) - int(_net_extents[3])
+    elif _gtk_extents and len(_gtk_extents) >= 4:
+        newLeft = newBox.left - _gtk_extents[0]
+        newTop = newBox.top - _gtk_extents[2]
+        newWidth = newBox.width + int(_gtk_extents[0]) + int(_gtk_extents[1])
+        newHeight = newBox.height + int(_gtk_extents[2]) + int(_gtk_extents[3])
+    else:
+        newLeft = newBox.left
+        newTop = newBox.top
+        newWidth = newBox.width
+        newHeight = newBox.height
 
+    newLeft = max(0, newLeft)  # Xlib won't accept negative positions
+    newTop = max(0, newTop)
+    handle.setMoveResize(x=newLeft, y=newTop, width=newWidth, height=newHeight, userAction=True)
+    # handle.configure(x=newLeft, y=newTop, width=newBox.width, height=newBox.height)
