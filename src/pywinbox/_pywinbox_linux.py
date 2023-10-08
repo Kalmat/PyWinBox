@@ -47,7 +47,6 @@ def _getWindowBox(handle: EwmhWindow) -> Box:
         h = geom.height + int(_net_extents[2]) + int(_net_extents[3])
     elif _gtk_extents and len(_gtk_extents) >= 4:
         # this means there is a GTK HeaderBar
-        _gtk_extents = handle._getGtkFrameExtents()
         x = pos.x + int(_gtk_extents[0])
         y = pos.y + int(_gtk_extents[2])
         w = geom.width - int(_gtk_extents[0]) - int(_gtk_extents[1])
@@ -73,8 +72,8 @@ def _moveResizeWindow(handle: EwmhWindow, newBox: Box):
         newWidth = newBox.width - int(_net_extents[0]) - int(_net_extents[1])
         newHeight = newBox.height - int(_net_extents[2]) - int(_net_extents[3])
     elif _gtk_extents and len(_gtk_extents) >= 4:
-        newLeft = newBox.left - _gtk_extents[0]
-        newTop = newBox.top - _gtk_extents[2]
+        newLeft = newBox.left - int(_gtk_extents[0])
+        newTop = newBox.top - int(_gtk_extents[2])
         newWidth = newBox.width + int(_gtk_extents[0]) + int(_gtk_extents[1])
         newHeight = newBox.height + int(_gtk_extents[2]) + int(_gtk_extents[3])
     else:
