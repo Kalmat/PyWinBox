@@ -67,10 +67,10 @@ def _moveResizeWindow(handle: EwmhWindow, newBox: Box):
     _net_extents = handle._getNetFrameExtents()
     _gtk_extents = handle._getGtkFrameExtents()
     if _net_extents and len(_net_extents) >= 4:
-        # this means it has no GTK HeaderBar
+        # seems that top left includes window borders, but width and height does not
         newLeft = newBox.left
         newTop = newBox.top
-        newWidth = newBox.width
+        newWidth = newBox.width - int(_net_extents[0]) - int(_net_extents[1])
         newHeight = newBox.height - int(_net_extents[2]) - int(_net_extents[3])
     elif _gtk_extents and len(_gtk_extents) >= 4:
         newLeft = newBox.left - _gtk_extents[0]
