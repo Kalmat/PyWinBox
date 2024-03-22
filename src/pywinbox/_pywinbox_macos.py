@@ -134,7 +134,7 @@ def _CGmoveResizeTo(appName: str, title: str, newBox: Box):
     proc = subprocess.Popen(['osascript', '-', appName, title,
                              str(newBox.left), str(newBox.top), str(newBox.width), str(newBox.height)],
                             stdin=subprocess.PIPE, stdout=subprocess.PIPE, encoding='utf8')
-    ret, err = proc.communicate(cmd)
+    _, _ = proc.communicate(cmd)
 
 
 def _flipTop(window: AppKit.NSWindow, box: Box) -> int:

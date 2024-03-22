@@ -48,6 +48,8 @@ def test_basic():
         if npw.isMaximized:  # Make sure it starts un-maximized
             npw.restore(wait=wait)
         assert not npw.isMaximized
+        
+        npw.size = (600, 400)
 
         if sys.platform == "darwin":
             myPyBox = pywinbox.PyWinBox(onQuery=None, onSet=None, handle=(npw.getAppName(), npw.title or ""))

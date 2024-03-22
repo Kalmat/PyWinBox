@@ -14,13 +14,15 @@ import win32gui
 from ._main import Box
 
 
+# Thanks to poipoiPIO (https://github.com/poipoiPIO) for his HELP!!!
 try:
     dpiAware = ctypes.windll.user32.GetAwarenessFromDpiAwarenessContext(ctypes.windll.user32.GetThreadDpiAwarenessContext())
 except AttributeError:  # Windows server does not implement GetAwarenessFromDpiAwarenessContext
     dpiAware = 0
 
 if dpiAware == 0:
-    ctypes.windll.shcore.SetProcessDpiAwareness(2)
+    # It seems that this can't be invoked twice. Setting it to 1 for apps having 0 (unaware) may have less impact
+    ctypes.windll.shcore.SetProcessDpiAwareness(1)
 
 
 def _getHandle(handle: Union[int, str]) -> Optional[int]:

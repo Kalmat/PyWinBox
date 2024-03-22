@@ -5,7 +5,7 @@ __all__ = [
     "version", "PyWinBox", "Box", "Rect", "Point", "Size", "pointInBox"
 ]
 
-__version__ = "0.6"
+__version__ = "0.7"
 
 
 def version(numberOnly: bool = True) -> str:
