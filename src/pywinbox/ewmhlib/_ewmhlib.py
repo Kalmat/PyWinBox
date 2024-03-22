@@ -149,7 +149,7 @@ def _getRoots(updateDisplays: bool = False) -> List[Tuple[Xlib.display.Display, 
     if updateDisplays or displaysCount > 1 or defaultDisplay.screen_count() > 1:
         if updateDisplays:
             display = Xlib.display.Display()
-            screen = display.screen()
+            screen: Struct = display.screen()
             rootsInfo = [(display, screen, screen.root)]
             displays: List[Xlib.display.Display] = _getDisplays()
         else:
@@ -157,7 +157,7 @@ def _getRoots(updateDisplays: bool = False) -> List[Tuple[Xlib.display.Display, 
         for display in displays:
             for i in range(display.screen_count()):
                 try:
-                    screen: Struct = display.screen(i)
+                    screen = display.screen(i)
                     root: XWindow = screen.root
                     if root.id != defaultRoot.id:
                         rootsInfo.append((display, screen, root))
