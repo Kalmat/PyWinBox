@@ -11,7 +11,7 @@ from typing import Union, Optional
 from Xlib.xobject.drawable import Window as XWindow
 
 from ._main import Box
-from .ewmhlib import EwmhWindow
+from ewmhlib import EwmhWindow
 
 
 def _getHandle(handle: Union[int, XWindow]) -> Optional[EwmhWindow]:
@@ -33,7 +33,7 @@ def _getWindowBox(handle: EwmhWindow) -> Box:
     w = geom.width
     h = geom.height
     # Thanks to roym899 (https://github.com/roym899) for his HELP!!!!
-    if os.environ.get('XDG_SESSION_TYPE', "").lower() == "gnome":
+    if "gnome" in os.environ.get('XDG_CURRENT_DESKTOP', "").lower():
         # Most apps in GNOME do not set _NET_EXTENTS, but _GTK_EXTENTS,
         # which is the additional space AROUND the window.
         _gtk_extents = handle._getGtkFrameExtents()
@@ -54,7 +54,7 @@ def _moveResizeWindow(handle: EwmhWindow, newBox: Box):
     newTop = max(0, newBox.top)
     newWidth = newBox.width
     newHeight = newBox.height
-    if os.environ.get('XDG_SESSION_TYPE', "").lower() == "gnome":
+    if "gnome" in os.environ.get('XDG_CURRENT_DESKTOP', "").lower():
         # Most apps in GNOME do not set _NET_EXTENTS, but _GTK_EXTENTS,
         # which is the additional space AROUND the window.
         _gtk_extents = handle._getGtkFrameExtents()

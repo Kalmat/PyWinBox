@@ -1,4 +1,4 @@
-0.7, 2024/03/22 -- LINUX: (Really) Fixed position and size for GNOME (by using GTK_EXTENTS)
+0.7, 2024/03/22 -- LINUX: Added ewmhlib as separate module. (Really) Fixed position and size for GNOME (by using GTK_EXTENTS)
 0.6, 2023/10/12 -- LINUX: Improved position and size for GNOME (by using GTK_EXTENTS)
                    WIN32: Fixed GetAwarenessFromDpiAwarenessContext not supported on Windows Server
 0.5, 2023/09/06 -- MACOS: Tested OK in multi-monitor setup

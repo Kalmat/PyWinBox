@@ -138,15 +138,15 @@ def test_basic():
         print(npw.box, npw.rect)
         assert npw.width == 700
 
-        myPyBox.height = 500
+        myPyBox.height = 400
         time.sleep(timelap)
         print(npw.box, npw.rect)
-        assert npw.height == 500
+        assert npw.height == 400
 
-        myPyBox.size = (551, 501)
+        myPyBox.size = (551, 401)
         time.sleep(timelap)
         print(npw.box, npw.rect)
-        assert npw.size == (551, 501)
+        assert npw.size == (551, 401)
 
         # Test closing
         npw.close()

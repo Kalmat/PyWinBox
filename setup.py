@@ -32,11 +32,12 @@ setup(
     license='BSD 3',
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
-    package_data={"pywinbox": ["py.typed"], "ewmhlib": ["py.typed"]},
+    package_data={"pywinbox": ["py.typed"]},
     test_suite='tests',
     install_requires=[
         "pywin32>=302; sys_platform == 'win32'",
         "python-xlib>=0.21; sys_platform == 'linux'",
+        "ewmhlib>=0.1; sys_platform == 'linux'",
         "pyobjc>=8.1; sys_platform == 'darwin'",
         "typing_extensions>=4.4.0"
     ],
@@ -46,7 +47,7 @@ setup(
             "mypy>=0.990",
             "types-pywin32>=305.0.0.3",
             "types-python-xlib>=0.32",
-            "pywinctl>=0.1"
+            "pywinctl>=0.3"
         ]
     },
     keywords="left top right bottom size width height topleft bottomleft topright bottomright midtop midleft " +
