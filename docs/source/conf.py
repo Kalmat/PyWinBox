@@ -24,7 +24,6 @@ with open("../../src/pywinbox/__init__.py", "r") as fileObj:
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 extensions = ["myst_parser"]
-master_doc = 'readme'  # A local file that includes the external README
 myst_enable_extensions = ["colon_fence"]
 source_suffix = {
     '.rst': 'restructuredtext',
@@ -39,3 +38,14 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 html_theme = 'bizstyle'
 html_static_path = ['_static']
+myst_heading_anchors = 7
+
+# -- Copy the modules documentation ------------------------------------------
+# https://stackoverflow.com/questions/66495200/is-it-possible-to-include-external-rst-files-in-my-documentation
+from urllib.request import urlretrieve
+
+urlretrieve(
+    "https://raw.githubusercontent.com/kalmat/pymonctl/master/README.md",
+    "index.md"
+)
+
