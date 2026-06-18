@@ -10,7 +10,9 @@ Welcome to PyWinBox's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
+.. include:: ../../README.md
+   :parser: myst_parser.sphinx_
+   :start-after: <!-- index.rst content start -->
 
 Indices and tables
 ==================
