@@ -47,7 +47,8 @@ setup(
             "mypy>=0.990",
             "types-pywin32>=305.0.0.3",
             "types-python-xlib>=0.32",
-            "pywinctl>=0.3"
+            "pywinctl>=0.3",
+            "myst-parser"
         ]
     },
     keywords="left top right bottom size width height topleft bottomleft topright bottomright midtop midleft " +
