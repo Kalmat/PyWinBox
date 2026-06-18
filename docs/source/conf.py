@@ -39,12 +39,3 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 html_theme = 'bizstyle'
 html_static_path = ['_static']
 myst_heading_anchors = 7
-
-# -- Copy the modules documentation ------------------------------------------
-# https://stackoverflow.com/questions/66495200/is-it-possible-to-include-external-rst-files-in-my-documentation
-from urllib.request import urlretrieve
-
-urlretrieve(
-    "https://raw.githubusercontent.com/kalmat/pywinbox/master/README.md",
-    "index.md"
-)
