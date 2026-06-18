@@ -45,7 +45,7 @@ myst_heading_anchors = 7
 from urllib.request import urlretrieve
 
 urlretrieve(
-    "https://raw.githubusercontent.com/kalmat/pymonctl/master/README.md",
+    "https://raw.githubusercontent.com/kalmat/pywinbox/master/README.md",
     "index.md"
 )
 
