@@ -24,7 +24,7 @@ with open("../../src/pywinbox/__init__.py", "r") as fileObj:
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 extensions = ["myst_parser"]
-master_doc = 'readme_link'  # A local file that includes the external README
+master_doc = 'readme'  # A local file that includes the external README
 myst_enable_extensions = ["colon_fence"]
 source_suffix = {
     '.rst': 'restructuredtext',
