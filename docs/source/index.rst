@@ -3,6 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. include:: ../../README.md
+   :parser: myst_parser.sphinx_
+
+
 Welcome to PyWinBox's documentation!
 ====================================
 
@@ -10,9 +14,6 @@ Welcome to PyWinBox's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-.. include:: ../../README.md
-   :parser: myst_parser.sphinx_
-   :start-after: <!-- index.rst content start -->
 
 Indices and tables
 ==================
