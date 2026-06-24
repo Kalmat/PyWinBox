@@ -52,8 +52,17 @@ class Delegate(NSObject):
             handle = win
             print(win.title(), win.frame(), type(win.frame().origin))
         print()
+        assert handle is not None
 
         myPyBox = pywinbox.PyWinBox(onQuery=None, onSet=None, handle=handle)
+
+        # macOS won't let a window's top edge rise above the menu bar, so any
+        # target whose top edge exceeds the usable screen height gets clamped.
+        # CI runners have a small headless display, so derive bottom targets
+        # from the actual screen height instead of assuming a tall desktop.
+        screenH = int(handle.screen().frame().size.height)
+        print("SCREEN", handle.screen().frame())
+        lowBottom = min(700, screenH - 100)
 
         timelap = 0.3
 
@@ -72,10 +81,10 @@ class Delegate(NSObject):
         time.sleep(timelap)
         assert myPyBox.top == 200
 
-        print("MOVE bottom = 800", myPyBox.box, myPyBox.rect)
-        myPyBox.bottom = 800
+        print(f"MOVE bottom = {lowBottom}", myPyBox.box, myPyBox.rect)
+        myPyBox.bottom = lowBottom
         time.sleep(timelap)
-        assert myPyBox.bottom == 800
+        assert myPyBox.bottom == lowBottom
 
         print("MOVE topleft = (300, 400)", myPyBox.box, myPyBox.rect)
         myPyBox.topleft = (300, 400)
@@ -87,10 +96,10 @@ class Delegate(NSObject):
         time.sleep(timelap)
         assert myPyBox.topright == (300, 400)
 
-        print("MOVE bottomleft = (300, 700)", myPyBox.box, myPyBox.rect)
-        myPyBox.bottomleft = (300, 700)
+        print(f"MOVE bottomleft = (300, {lowBottom})", myPyBox.box, myPyBox.rect)
+        myPyBox.bottomleft = (300, lowBottom)
         time.sleep(timelap)
-        assert myPyBox.bottomleft == (300, 700)
+        assert myPyBox.bottomleft == (300, lowBottom)
 
         print("MOVE bottomright = (1000, 200)", myPyBox.box, myPyBox.rect)
         myPyBox.bottomright = (1000, 200)
@@ -112,10 +121,10 @@ class Delegate(NSObject):
         time.sleep(timelap)
         assert myPyBox.midtop == (300, 400)
 
-        print("MOVE midbottom = (300, 700)", myPyBox.box, myPyBox.rect)
-        myPyBox.midbottom = (300, 700)
+        print(f"MOVE midbottom = (300, {lowBottom})", myPyBox.box, myPyBox.rect)
+        myPyBox.midbottom = (300, lowBottom)
         time.sleep(timelap)
-        assert myPyBox.midbottom == (300, 700)
+        assert myPyBox.midbottom == (300, lowBottom)
 
         print("MOVE center = (300, 400)", myPyBox.box, myPyBox.rect)
         myPyBox.center = (300, 400)
