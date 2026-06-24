@@ -1,12 +1,10 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 from __future__ import annotations
 
 import sys
 
 assert sys.platform == "win32"
 
-from typing import Union, Optional
 
 import ctypes
 import win32gui
@@ -25,7 +23,7 @@ if dpiAware == 0:
     ctypes.windll.shcore.SetProcessDpiAwareness(1)
 
 
-def _getHandle(handle: Union[int, str]) -> Optional[int]:
+def _getHandle(handle: int | str) -> int | None:
     newHandle = None
     if isinstance(handle, str):
         try:

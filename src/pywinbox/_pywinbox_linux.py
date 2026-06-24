@@ -1,12 +1,10 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 from __future__ import annotations
 
 import os
 import sys
 assert sys.platform == "linux"
 
-from typing import Union, Optional
 
 from Xlib.xobject.drawable import Window as XWindow
 
@@ -14,7 +12,7 @@ from ._main import Box
 from ewmhlib import EwmhWindow
 
 
-def _getHandle(handle: Union[int, XWindow]) -> Optional[EwmhWindow]:
+def _getHandle(handle: int | XWindow) -> EwmhWindow | None:
 
     newHandle = None
     if isinstance(handle, int):

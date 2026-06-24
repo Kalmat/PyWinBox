@@ -1,5 +1,4 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 # Incomplete type stubs for pyobjc
 # mypy: disable_error_code = no-any-return
 from __future__ import annotations
@@ -9,7 +8,7 @@ import sys
 assert sys.platform == "darwin"
 
 import subprocess
-from typing import NamedTuple, Union, Optional, cast
+from typing import NamedTuple, cast
 
 import AppKit
 
@@ -27,7 +26,7 @@ class _macOSCGHandle(NamedTuple):
     windowTitle: str
 
 
-def _getHandle(handle) -> Optional[Union[_macOSCGHandle, _macOSNSHandle]]:
+def _getHandle(handle) -> _macOSCGHandle | _macOSNSHandle | None:
     newHandle = None
     if isinstance(handle, tuple):
         app, window = handle
@@ -71,21 +70,21 @@ def _checkPermissions(activate: bool = False) -> bool:
     return ret == "true"
 
 
-def _getWindowBox(handle: Union[_macOSNSHandle, _macOSCGHandle], flipValues: bool = False):
+def _getWindowBox(handle: _macOSNSHandle | _macOSCGHandle, flipValues: bool = False):
     if handle.isNSHandle:
-        handle = cast(_macOSNSHandle, handle)
+        handle = cast("_macOSNSHandle", handle)
         return _NSgetWindowBox(handle.window, flipValues)
     else:
-        handle = cast(_macOSCGHandle, handle)
+        handle = cast("_macOSCGHandle", handle)
         return _CGgetWindowBox(handle.appName, handle.windowTitle)
 
 
-def _moveResizeWindow(handle: Union[_macOSNSHandle, _macOSCGHandle], newBox: Box, flipValues: bool = False):
+def _moveResizeWindow(handle: _macOSNSHandle | _macOSCGHandle, newBox: Box, flipValues: bool = False):
     if handle.isNSHandle:
-        handle = cast(_macOSNSHandle, handle)
+        handle = cast("_macOSNSHandle", handle)
         _NSmoveResizeTo(handle.window, newBox, flipValues)
     else:
-        handle = cast(_macOSCGHandle, handle)
+        handle = cast("_macOSCGHandle", handle)
         _CGmoveResizeTo(handle.appName, handle.windowTitle, newBox)
 
 
