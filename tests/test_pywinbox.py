@@ -5,41 +5,55 @@ from __future__ import annotations
 import subprocess
 import sys
 import time
+from typing import TypedDict
+
+import pywinctl
 
 import pywinbox
-import pywinctl
+
+
+class GetWindowKwargs(TypedDict):
+    title: str
+    condition: int  # TODO: Consider making pywinctl.Re an IntEnum
 
 
 def test_basic() -> None:
-
-    npw = None
-
     if sys.platform == "win32":
-        subprocess.Popen('notepad')
-        time.sleep(0.5)
-
-        npw = pywinctl.getActiveWindow()
-
+        process = "notepad"
+        get_window_kwargs: GetWindowKwargs = {
+            "title": "Notepad",
+            "condition": pywinctl.Re.ENDSWITH,
+        }
     elif sys.platform == "linux":
-        subprocess.Popen('gedit')
-        time.sleep(5)
-
-        npw = pywinctl.getActiveWindow()
-
+        process = "gedit"
+        get_window_kwargs: GetWindowKwargs = {
+            "title": "gedit",
+            "condition": pywinctl.Re.ENDSWITH,
+        }
     elif sys.platform == "darwin":
         if not pywinctl.checkPermissions(activate=True):
             exit()
-        subprocess.Popen(['touch', 'test.py'])
-        time.sleep(2)
-        subprocess.Popen(['open', '-a', 'TextEdit', 'test.py'])
-        time.sleep(5)
+        process = ["open", "-a", "TextEdit", __file__]
+        get_window_kwargs: GetWindowKwargs = {
+            "title": "test_pywinctl.py",
+            "condition": pywinctl.Re.IS,
+        }
+    else:
+        raise NotImplementedError(
+            "PyWinCtl currently does not support this platform. "
+            + "If you have useful knowledge, please contribute! https://github.com/Kalmat/PyWinCtl"
+        )
 
-        windows = pywinctl.getWindowsWithTitle('test.py')
-        if windows:
-            npw = windows[0]
+    subprocess.Popen(process)
 
-    assert npw is not None
+    testWindows: list[pywinctl.Window] = []
+    deadline = time.time() + 15
+    while not testWindows and time.time() < deadline:
+        time.sleep(0.5)
+        testWindows = pywinctl.getWindowsWithTitle(**get_window_kwargs)
+    assert len(testWindows) == 1
 
+    npw = testWindows[0]
     wait = True
     timelap = 0.5
 
