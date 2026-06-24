@@ -9,7 +9,6 @@ import traceback
 
 import pywinbox
 
-assert sys.platform == "darwin"
 
 import time
 
@@ -165,7 +164,7 @@ def demo() -> bool:
     # ... and create its delegate.  Note the use of the
     # Objective C constructors below, because Delegate
     # is a subclass of an Objective C class, NSObject
-    delegate = Delegate.alloc().init()
+    delegate: Delegate = Delegate.alloc().init()
     # Tell the application which delegate object to use.
     a.setDelegate_(delegate)
 
