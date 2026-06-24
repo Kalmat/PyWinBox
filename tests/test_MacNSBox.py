@@ -5,6 +5,7 @@
 # We need to import the relevant object definitions from PyObjC
 
 import sys
+import traceback
 
 import pywinbox
 
@@ -23,12 +24,24 @@ from AppKit import (
 class Delegate(NSObject):
 
     npw = None
+    failed = False
 
     def applicationSupportsSecureRestorableState_(self, app) -> bool:
         return True
 
     def applicationDidFinishLaunching_(self, aNotification: None) -> None:
         '''Called automatically when the application has launched'''
+        # PyObjC swallows exceptions raised inside delegate callbacks (only logging the type),
+        # so the window would never close and the app would hang forever.
+        # Catch everything, record failure, and terminate so test fails fast instead of timing out.
+        try:
+            self._runChecks()
+        except Exception:
+            type(self).failed = True
+            traceback.print_exc()
+            NSApp().terminate_(self)
+
+    def _runChecks(self) -> None:
         # Set it as the frontmost application
         NSApp().activateIgnoringOtherApps_(True)
 
@@ -146,7 +159,7 @@ class Delegate(NSObject):
         print("Now I'm ACTIVE")
 
 
-def demo() -> None:
+def demo() -> bool:
     # Create a new application instance ...
     a = NSApplication.sharedApplication()
     # ... and create its delegate.  Note the use of the
@@ -175,6 +188,8 @@ def demo() -> None:
     a.run()
     #AppHelper.runEventLoop()
 
+    return delegate.failed
+
 
 if __name__ == '__main__':
-    demo()
+    sys.exit(demo())
