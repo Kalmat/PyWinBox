@@ -69,7 +69,11 @@ jobs:
         if: ${{ startsWith(matrix.os, 'ubuntu') }}
         run: |
           sudo apt update
-          sudo apt install xvfb openbox
+          # xvfb+openbox: headless X server and WM
+          # gedit: the test window (not preinstalled on ubuntu-24.04 runners)
+          # x11-xserver-utils (xrandr/xset) + x11-utils: required by tests for window geometry
+          # dbus-x11: dbus-launch, so the GTK app (gedit) gets a session bus
+          sudo apt install -y xvfb openbox gedit x11-xserver-utils x11-utils dbus-x11
       - uses: astral-sh/setup-uv@v8.2.0
         with:
           python-version: ${{ matrix.python-version }}
@@ -78,7 +82,7 @@ jobs:
       - name: Run tests (Linux)
         if: ${{ startsWith(matrix.os, 'ubuntu') }}
         working-directory: tests
-        run: xvfb-run --server-args="-screen 0 1280x1024x24" bash -c "openbox & sleep 1 && python test_pywinbox.py"
+        run: xvfb-run --server-args="-screen 0 1280x1024x24" bash -c "openbox & sleep 1 && dbus-launch --exit-with-session python test_pywinbox.py"
       - name: Run tests (Windows & macOS)
         # if: ${{ !startsWith(matrix.os, 'ubuntu') }}
         working-directory: tests
