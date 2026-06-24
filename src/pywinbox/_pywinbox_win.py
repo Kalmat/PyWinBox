@@ -28,7 +28,7 @@ def _getHandle(handle: int | str) -> int | None:
     if isinstance(handle, str):
         try:
             newHandle = int(handle, base=16)
-        except:
+        except Exception:
             pass
     elif isinstance(handle, int):
         newHandle = handle
