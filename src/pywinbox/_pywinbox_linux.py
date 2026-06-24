@@ -3,8 +3,9 @@ from __future__ import annotations
 
 import os
 import sys
-assert sys.platform == "linux"
 
+if sys.platform != "linux":
+    raise OSError(f"Cannot import {__name__} on {sys.platform}")
 
 from Xlib.xobject.drawable import Window as XWindow
 

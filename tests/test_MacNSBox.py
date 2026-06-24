@@ -8,7 +8,8 @@ import sys
 
 import pywinbox
 
-assert sys.platform == "darwin"
+if sys.platform != "darwin":
+    raise OSError(f"Cannot import {__name__} on {sys.platform}")
 
 import time
 

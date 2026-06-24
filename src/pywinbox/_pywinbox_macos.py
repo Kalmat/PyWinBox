@@ -5,7 +5,8 @@ from __future__ import annotations
 
 import sys
 
-assert sys.platform == "darwin"
+if sys.platform != "darwin":
+    raise OSError(f"Cannot import {__name__} on {sys.platform}")
 
 import subprocess
 from typing import NamedTuple, cast
