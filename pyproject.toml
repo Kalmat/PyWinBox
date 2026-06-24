@@ -1,0 +1,88 @@
+[build-system]
+requires = ["uv_build>=0.11.21,<0.12"]
+build-backend = "uv_build"
+
+[project.urls]
+Homepage = "https://github.com/Kalmat/PyWinBox"
+Repository = "https://github.com/Kalmat/PyWinBox.git"
+Issues = "https://github.com/Kalmat/PyWinBox/issues"
+Changelog = "https://github.com/Kalmat/PyWinBox/blob/HEAD/CHANGES.txt"
+Documentation = "https://pywinbox.readthedocs.io/"
+
+[project]
+name = "PyWinBox"
+version = "0.7"
+description = "Cross-Platform and multi-monitor toolkit to handle rectangular areas and windows box"
+authors = [{ name = "Kalmat", email = "palookjones@gmail.com" }]
+readme = "README.md"
+license = "BSD-3-Clause"
+license-files = ["LICENSE.txt"]
+requires-python = ">=3.9"
+keywords = [
+    "left",
+    "top",
+    "right",
+    "bottom",
+    "size",
+    "width",
+    "height",
+    "topleft",
+    "bottomleft",
+    "topright",
+    "bottomright",
+    "midtop",
+    "midleft",
+    "midbottom",
+    "midright",
+    "center",
+    "centerx",
+    "centery",
+    "box",
+    "rect",
+    "boundingbox",
+    "area",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Win32 (MS Windows)",
+    "Environment :: X11 Applications",
+    "Environment :: MacOS X",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+    "pywin32>=302; sys_platform == 'win32'",
+    "python-xlib>=0.21; sys_platform == 'linux'",
+    "ewmhlib>=0.1; sys_platform == 'linux'",
+    "pyobjc>=8.1; sys_platform == 'darwin'",
+    "typing_extensions>=4.4.0",
+]
+
+[dependency-groups]
+docs = ["myst-parser"]
+dev = [
+    { include-group = "docs" },
+    "ewmhlib",
+    "pywinctl>=0.3",
+    "mypy>=0.990,<2",
+    "types-python-xlib>=0.32",
+    "types-pywin32>=305.0.0.3",
+    "typing_extensions>=4.4.0",
+]
+
+[tool.uv]
+exclude-newer = "1 week"
+[tool.uv.exclude-newer-package]
+# Kalmat owns these packages
+ewmhlib = false
+pywinctl = false
