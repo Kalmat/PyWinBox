@@ -1,11 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from importlib.metadata import version as _importlib_version
 
 __all__ = [
     "version", "PyWinBox", "Box", "Rect", "Point", "Size", "pointInBox"
 ]
 
-__version__ = "0.7"
+__version__ = _importlib_version("pywinctl")
 
 
 def version(numberOnly: bool = True) -> str:

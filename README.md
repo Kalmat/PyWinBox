@@ -1,6 +1,6 @@
 # PyWinBox
 
-[![Type Checking](https://github.com/Kalmat/PyWinBox/actions/workflows/type-checking.yml/badge.svg)](https://github.com/Kalmat/PyWinBox/actions/workflows/type-checking.yml)
+[![CI](https://github.com/Kalmat/PyWinBox/actions/workflows/ci.yml/badge.svg)](https://github.com/Kalmat/PyWinBox/actions/workflows/ci.yml)
 [![PyPI version](https://badge.fury.io/py/PyWinBox.svg)](https://badge.fury.io/py/PyWinBox)
 
 
@@ -85,17 +85,17 @@ These are useful data structs (named tuples, actually) you can use to better man
 
 ## INSTALL <a name="install"></a>
 
-To install this module on your system, you can use pip: 
+To install this module on your system, you can use pip:
 
-    pip3 install pywinbox
+    python -m pip install pywinbox
 
-or
+or using uv:
 
-    python3 -m pip install pywinbox
+    uv add pywinbox
 
 Alternatively, you can download the wheel file (.whl) available in the [Download page](https://pypi.org/project/PyWinBox/#files) and the [dist folder](https://github.com/Kalmat/PyWinBox/tree/master/dist), and run this (don't forget to replace 'x.x.xx' with proper version number):
 
-    pip install PyWinBox-x.x.xx-py3-none-any.whl
+    python -m pip install PyWinBox-x.x.xx-py3-none-any.whl
 
 You may want to add `--force-reinstall` option to be sure you are installing the right dependencies version.
 
@@ -114,14 +114,20 @@ If you want to use this code or contribute, you can either:
 * Create a fork of the [repository](https://github.com/Kalmat/PyWinBox), or 
 * [Download the repository](https://github.com/Kalmat/PyWinBox/archive/refs/heads/master.zip), uncompress, and open it on your IDE of choice (e.g. PyCharm)
 
-Be sure you install all dependencies described on "requirements.txt" by using pip
+Be sure you install all dev dependencies by running:
+
+    uv sync
+
+or
+    python -m venv .venv
+    python -m pip install -e . --group=dev
 
 ## TEST <a name="test"></a>
 
 To test this module on your own system, cd to "tests" folder and run:
 
-    python3 test_pywinbox.py
+    uv run test_pywinbox.py
 
 For macOS NSWindow, you can also test using:
 
-    python3 test_MacNSBox.py
+    uv run test_MacNSBox.py
