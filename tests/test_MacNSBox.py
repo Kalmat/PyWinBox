@@ -4,6 +4,7 @@
 
 # We need to import the relevant object definitions from PyObjC
 
+import os
 import sys
 import traceback
 
@@ -23,7 +24,6 @@ from AppKit import (
 class Delegate(NSObject):
 
     npw = None
-    failed = False
 
     def applicationSupportsSecureRestorableState_(self, app) -> bool:
         return True
@@ -32,13 +32,16 @@ class Delegate(NSObject):
         '''Called automatically when the application has launched'''
         # PyObjC swallows exceptions raised inside delegate callbacks (only logging the type),
         # so the window would never close and the app would hang forever.
-        # Catch everything, record failure, and terminate so test fails fast instead of timing out.
+        # Catch everything, print the traceback, and force-exit nonzero so the test fails fast.
+        # We can't use NSApp().terminate_() (it exits 0) nor sys.exit() (SystemExit isn't an
+        # Exception subclass, so PyObjC swallows it too): os._exit() is the only reliable path.
         try:
             self._runChecks()
         except Exception:
-            type(self).failed = True
             traceback.print_exc()
-            NSApp().terminate_(self)
+            sys.stdout.flush()
+            sys.stderr.flush()
+            os._exit(1)
 
     def _runChecks(self) -> None:
         # Set it as the frontmost application
@@ -158,7 +161,7 @@ class Delegate(NSObject):
         print("Now I'm ACTIVE")
 
 
-def demo() -> bool:
+def demo() -> None:
     # Create a new application instance ...
     a = NSApplication.sharedApplication()
     # ... and create its delegate.  Note the use of the
@@ -184,11 +187,12 @@ def demo() -> bool:
     w.orderFrontRegardless()
 
     # ... and start the application
+    # On success the window closes -> windowWillClose_ -> terminate_ (exits 0).
+    # On failure _runChecks' handler calls os._exit(1). Either way control does not
+    # return here, so there's nothing to do after a.run().
     a.run()
     #AppHelper.runEventLoop()
 
-    return delegate.failed
-
 
 if __name__ == '__main__':
-    sys.exit(demo())
+    demo()
