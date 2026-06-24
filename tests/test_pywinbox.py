@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 import time
@@ -35,7 +36,7 @@ def test_basic() -> None:
             exit()
         process = ["open", "-a", "TextEdit", __file__]
         get_window_kwargs: GetWindowKwargs = {
-            "title": "test_pywinctl.py",
+            "title": os.path.basename(__file__),
             "condition": pywinctl.Re.IS,
         }
     else:
