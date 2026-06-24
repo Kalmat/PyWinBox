@@ -30,7 +30,7 @@ def _getHandle(handle: Union[int, str]) -> Optional[int]:
     if isinstance(handle, str):
         try:
             newHandle = int(handle, base=16)
-        except:
+        except Exception:
             pass
     elif isinstance(handle, int):
         newHandle = handle
