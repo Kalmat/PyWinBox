@@ -71,6 +71,7 @@ dependencies = [
 docs = ["myst-parser"]
 dev = [
     { include-group = "docs" },
+    "ruff>=0.15.16",
     "ewmhlib",
     "pywinctl>=0.3",
     "mypy>=0.990,<2",

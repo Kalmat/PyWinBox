@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# encoding: utf-8
 
 # Lawrence Akka - https://sourceforge.net/p/pyobjc/mailman/pyobjc-dev/thread/0B4BC391-6491-445D-92D0-7B1CEF6F51BE%40me.com/#msg27726282
 
@@ -25,10 +24,10 @@ class Delegate(NSObject):
 
     npw = None
 
-    def applicationSupportsSecureRestorableState_(self, app):
+    def applicationSupportsSecureRestorableState_(self, app) -> bool:
         return True
 
-    def applicationDidFinishLaunching_(self, aNotification: None):
+    def applicationDidFinishLaunching_(self, aNotification: None) -> None:
         '''Called automatically when the application has launched'''
         # Set it as the frontmost application
         NSApp().activateIgnoringOtherApps_(True)
@@ -137,17 +136,17 @@ class Delegate(NSObject):
         print("CLOSE")
         win.close()
 
-    def windowWillClose_(self, aNotification: None):
+    def windowWillClose_(self, aNotification: None) -> None:
         '''Called automatically when the window is closed'''
         print("Window has been closed")
         # Terminate the application
         NSApp().terminate_(self)
 
-    def windowDidBecomeKey_(self, aNotification: None):
+    def windowDidBecomeKey_(self, aNotification: None) -> None:
         print("Now I'm ACTIVE")
 
 
-def demo():
+def demo() -> None:
     # Create a new application instance ...
     a = NSApplication.sharedApplication()
     # ... and create its delegate.  Note the use of the
@@ -168,7 +167,7 @@ def demo():
     # to be the same delegate as the application is using)...
     w.setDelegate_(delegate)
     # ... and set some properties. Unicode strings are preferred.
-    w.setTitle_(u'Hello, World!')
+    w.setTitle_('Hello, World!')
     # All set. Now we can show the window ...
     w.orderFrontRegardless()
 

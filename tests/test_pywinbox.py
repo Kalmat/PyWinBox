@@ -1,5 +1,4 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 
 from __future__ import annotations
 
@@ -11,7 +10,7 @@ import pywinbox
 import pywinctl
 
 
-def test_basic():
+def test_basic() -> None:
 
     npw = None
 
@@ -152,7 +151,7 @@ def test_basic():
         npw.close()
 
 
-def main():
+def main() -> None:
     test_basic()
 
 

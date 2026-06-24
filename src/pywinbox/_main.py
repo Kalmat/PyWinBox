@@ -1,10 +1,9 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 from __future__ import annotations
 
 import sys
 from collections.abc import Callable
-from typing import Union, Tuple, NamedTuple, Optional
+from typing import NamedTuple
 
 class Box(NamedTuple):
     """Container class to handle Box struct (left, top, width, height)"""
@@ -41,7 +40,7 @@ def pointInBox(x: int, y: int, box: Box) -> bool:
 
 class PyWinBox:
 
-    def __init__(self, onQuery: Optional[Callable[[], Box]] = None, onSet: Optional[Callable[[Box], None]] = None, handle=None):
+    def __init__(self, onQuery: Callable[[], Box] | None = None, onSet: Callable[[Box], None] | None = None, handle=None) -> None:
         """
         Class to access all area/window box properties.
 
@@ -111,7 +110,7 @@ class PyWinBox:
         if self._handle is not None:
             _moveResizeWindow(self._handle, newBox)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Return a string of the constructor function call to create this Box object."""
         return "%s(left=%s, top=%s, width=%s, height=%s)" % (
             self.__class__.__name__,
@@ -121,7 +120,7 @@ class PyWinBox:
             self._box.height,
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Return a string representation of this Box object."""
         return "(%s, %s, %s, %s)" % (
             self._box.left,
@@ -202,7 +201,7 @@ class PyWinBox:
         return Point(self._box.left, self._box.top)
 
     @position.setter
-    def position(self, value: Union[Point, Tuple[int, int]]):
+    def position(self, value: Point | tuple[int, int]):
         val: Point = Point(*value)
         self._box = self._onQuery()
         self._box = Box(val.x, val.y, self._box.width, self._box.height)
@@ -214,7 +213,7 @@ class PyWinBox:
         return Size(self._box.width, self._box.height)
 
     @size.setter
-    def size(self, value: Union[Size, Tuple[int, int]]):
+    def size(self, value: Size | tuple[int, int]):
         val: Size = Size(*value)
         self._box = self._onQuery()
         self._box = Box(self._box.left, self._box.top, val.width, val.height)
@@ -226,7 +225,7 @@ class PyWinBox:
         return self._box
 
     @box.setter
-    def box(self, value: Union[Box, Tuple[int, int, int, int]]):
+    def box(self, value: Box | tuple[int, int, int, int]):
         val: Box = Box(*value)
         self._box = val
         self._onSet(self._box)
@@ -238,7 +237,7 @@ class PyWinBox:
                     self._box.top + self._box.height)
 
     @rect.setter
-    def rect(self, value: Union[Rect, Tuple[int, int, int, int]]):
+    def rect(self, value: Rect | tuple[int, int, int, int]):
         val: Rect = Rect(*value)
         self._box = Box(val.left, val.top, abs(val.right - val.left), abs(val.bottom - val.top))
         self._onSet(self._box)
@@ -249,7 +248,7 @@ class PyWinBox:
         return Point(self._box.left, self._box.top)
 
     @topleft.setter
-    def topleft(self, value: Union[Point, Tuple[int, int]]):
+    def topleft(self, value: Point | tuple[int, int]):
         val: Point = Point(*value)
         self._box = self._onQuery()
         self._box = Box(val.x, val.y, self._box.width, self._box.height)
@@ -261,7 +260,7 @@ class PyWinBox:
         return Point(self._box.left, self._box.top + self._box.height)
 
     @bottomleft.setter
-    def bottomleft(self, value: Union[Point, Tuple[int, int]]):
+    def bottomleft(self, value: Point | tuple[int, int]):
         val: Point = Point(*value)
         self._box = self._onQuery()
         self._box = Box(val.x, val.y - self._box.height, self._box.width, self._box.height)
@@ -273,7 +272,7 @@ class PyWinBox:
         return Point(self._box.left + self._box.width, self._box.top)
 
     @topright.setter
-    def topright(self, value: Union[Point, Tuple[int, int]]):
+    def topright(self, value: Point | tuple[int, int]):
         val: Point = Point(*value)
         self._box = self._onQuery()
         self._box = Box(val.x - self._box.width, val.y, self._box.width, self._box.height)
@@ -285,7 +284,7 @@ class PyWinBox:
         return Point(self._box.left + self._box.width, self._box.top + self._box.height)
 
     @bottomright.setter
-    def bottomright(self, value: Union[Point, Tuple[int, int]]):
+    def bottomright(self, value: Point | tuple[int, int]):
         val: Point = Point(*value)
         self._box = self._onQuery()
         self._box = Box(val.x - self._box.width, val.y - self._box.height, self._box.width, self._box.height)
@@ -297,7 +296,7 @@ class PyWinBox:
         return Point(self._box.left + (self._box.width // 2), self._box.top)
 
     @midtop.setter
-    def midtop(self, value: Union[Point, Tuple[int, int]]):
+    def midtop(self, value: Point | tuple[int, int]):
         val: Point = Point(*value)
         self._box = self._onQuery()
         self._box = Box(val.x - (self._box.width // 2), val.y, self._box.width, self._box.height)
@@ -309,7 +308,7 @@ class PyWinBox:
         return Point(self._box.left + (self._box.width // 2), self._box.top + self._box.height)
 
     @midbottom.setter
-    def midbottom(self, value: Union[Point, Tuple[int, int]]):
+    def midbottom(self, value: Point | tuple[int, int]):
         val: Point = Point(*value)
         self._box = self._onQuery()
         self._box = Box(val.x - (self._box.width // 2), val.y - self._box.height, self._box.width, self._box.height)
@@ -321,7 +320,7 @@ class PyWinBox:
         return Point(self._box.left, self._box.top + (self._box.height // 2))
 
     @midleft.setter
-    def midleft(self, value: Union[Point, Tuple[int, int]]):
+    def midleft(self, value: Point | tuple[int, int]):
         val: Point = Point(*value)
         self._box = self._onQuery()
         self._box = Box(val.x, val.y - (self._box.height // 2), self._box.width, self._box.height)
@@ -333,7 +332,7 @@ class PyWinBox:
         return Point(self._box.left + self._box.width, self._box.top + (self._box.height // 2))
 
     @midright.setter
-    def midright(self, value: Union[Point, Tuple[int, int]]):
+    def midright(self, value: Point | tuple[int, int]):
         val: Point = Point(*value)
         self._box = self._onQuery()
         self._box = Box(val.x - self._box.width, val.y - (self._box.height // 2), self._box.width, self._box.height)
@@ -345,7 +344,7 @@ class PyWinBox:
         return Point(self._box.left + (self._box.width // 2), self._box.top + (self._box.height // 2))
 
     @center.setter
-    def center(self, value: Union[Point, Tuple[int, int]]):
+    def center(self, value: Point | tuple[int, int]):
         val: Point = Point(*value)
         self._box = self._onQuery()
         self._box = Box(val.x - (self._box.width // 2), val.y - (self._box.height // 2), self._box.width, self._box.height)
