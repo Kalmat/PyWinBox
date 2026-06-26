@@ -1,11 +1,20 @@
 # PyWinBox
-
-[![CI](https://github.com/Kalmat/PyWinBox/actions/workflows/ci.yml/badge.svg)](https://github.com/Kalmat/PyWinBox/actions/workflows/ci.yml)
+[![CI](https://github.com/Kalmat/PyWinBox/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/Kalmat/PyWinBox/actions/workflows/ci.yml)
 [![PyPI version](https://badge.fury.io/py/PyWinBox.svg)](https://badge.fury.io/py/PyWinBox)
+[![Documentation Status](https://readthedocs.org/projects/pywinbox/badge/?version=latest)](https://pywinbox.readthedocs.io/en/latest/?badge=latest)
+[![Downloads](https://static.pepy.tech/badge/pywinbox/month)](https://pepy.tech/project/pywinbox)
+[![Stars](https://img.shields.io/github/stars/Kalmat/PyWinBox?style=flat)](https://github.com/Kalmat/PyWinBox/stargazers)
+[![License](https://img.shields.io/badge/license-BSD%203--Clause-blue)](LICENSE.txt)
 
+Cross-Platform module which allows to manage window areas (position and
+size) and all their properties, as well as any rectangular area on screen.
 
-Cross-Platform and multi-monitor module which allows to manage window areas (position and
-size) and all their properties, as well as any rectangular area.
+PyWinBox is similar to PyGame.Rect object, but extended with some useful features:
+* supports window areas, even if the window belongs to a foreign application
+* invokes custom callbacks whenever any area property is queried or changed
+* works in multi-monitor setups
+* manages both: Rect and Box Structs
+* provides convenient Structs to ease handling geometry properties and their attributes
 
 ## Rectangular areas
 
@@ -15,7 +24,7 @@ queried (onQuery) or set (onSet).
     myBox = pywinbox.PyWinBox(onQuery=customOnQuery, onSet=customOnSet)
 
 For rectangular areas, it is necessary to pass custom (not default) callbacks which actually manage the box struct values, 
-or the struct will be empty and useless.
+or the struct will be empty and/or useless.
 
 ## Window areas
 
@@ -24,7 +33,6 @@ To manage window areas, you need to also pass the window handle when instantiati
 - MS-Windows: integer (window id) or str (as returned by, e.g., PyQt's winId() method)
 - Linux: integer (window id) or X-Window object
 - macOS / foreign window: in case you want to manage a window from another application, you must pass target app and window names, as a tuple of strings (appName, windowTitle)
-- macOS / own window: if you want to manage your own application window, you must pass NSWindow() object
 
 (Search for cross-platform modules if you need a cross-platform handle. For instance, you can get this kind of handles
 using PyWinCtl's getHandle(), getAppName() or title methods)
@@ -55,6 +63,7 @@ use both in your custom callback:
 
     myBox = pywinbox.PyWinBox(onQuery=customOnQuery, onSet=customOnSet, handle=windowHandle)
 
+--- 
 
 ## Class Properties
 
@@ -73,6 +82,8 @@ use both in your custom callback:
     rect (left, top, right, bottom)
 
 
+---
+
 ## Data Structs
 
 These are useful data structs (named tuples, actually) you can use to better manage the values:
@@ -82,6 +93,7 @@ These are useful data structs (named tuples, actually) you can use to better man
     Size:   width, height
     Point:  x, y
 
+---
 
 ## INSTALL <a name="install"></a>
 
