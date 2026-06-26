@@ -16,6 +16,8 @@ PyWinBox is similar to [PyGame.Rect](https://www.pygame.org/docs/ref/rect.html) 
 - Manages both Rect and Box structs
 - Provides convenient named-tuple structs to ease handling geometry properties and their attributes
 
+---
+
 1. [Rectangular Areas](#rectangular-areas)
 2. [Window Areas](#window-areas)
    1. [Window Handle Formats](#window-handle-formats)
@@ -28,7 +30,6 @@ PyWinBox is similar to [PyGame.Rect](https://www.pygame.org/docs/ref/rect.html) 
 7. [Using this code](#using-this-code)
 8. [Test](#test)
 
-
 ## Rectangular Areas
 
 You just need to instantiate the `PyWinBox` class, passing custom callbacks to be called when any property is
@@ -40,7 +41,6 @@ myBox = pywinbox.PyWinBox(onQuery=customOnQuery, onSet=customOnSet)
 
 For rectangular areas, it is necessary to pass custom (not default) callbacks which actually manage the box struct
 values, or the struct will be empty and/or useless.
-
 
 ## Window Areas
 
@@ -97,7 +97,6 @@ myBox = pywinbox.PyWinBox(onQuery=customOnQuery, onSet=customOnSet, handle=windo
 
 ---
 
-
 ## Class Properties
 
 All position and size properties are readable and writable. Setting any property will trigger the `onSet` callback;
@@ -117,7 +116,6 @@ reading any property will trigger the `onQuery` callback.
 
 ---
 
-
 ## Data Structs
 
 These named tuples provide a convenient way to manage and pass geometry values throughout your code:
@@ -130,7 +128,6 @@ These named tuples provide a convenient way to manage and pass geometry values t
 | `Point` | `x, y`                     |
 
 ---
-
 
 ## Install
 
@@ -186,7 +183,6 @@ or
 python -m venv .venv
 python -m pip install -e . --group=dev
 ```
-
 
 ## Test
 
