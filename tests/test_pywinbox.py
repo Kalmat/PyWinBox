@@ -14,7 +14,7 @@ import pywinctl as pwc
 
 class GetWindowKwargs(TypedDict):
     title: str
-    condition: int
+    condition: int  # TODO: Consider making pywinctl.Re an IntEnum
 
 
 def test_basic() -> None:

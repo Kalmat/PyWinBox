@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import sys
 
-assert sys.platform == "win32"
-
+if sys.platform != "win32":
+    raise OSError(f"Cannot import {__name__} on {sys.platform}")
 
 import ctypes
 import win32gui
