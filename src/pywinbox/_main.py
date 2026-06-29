@@ -577,7 +577,7 @@ class PyWinBox(BaseClass):
 
     def __init__(self,
                  onQuery: Callable[[], Box] | None = None, onSet: Callable[[Box], None] | None = None,
-                 handle: int | str | NamedTuple | object | None = None) -> None:
+                 handle = None) -> None:
         """
         THIS CLASS IS FOR RETRO-COMPATIBILITY ONLY. Use WindowBox (window area) or ScreenBox (rectangular area) instead.
 
@@ -622,12 +622,12 @@ class PyWinBox(BaseClass):
         warnings.warn('PyWinBox class is deprecated. Use WindowBox (window area) or ScreenBox (rectangular area) instead',
                       DeprecationWarning, stacklevel=2)
         try:
-            self._handle :int | str | NamedTuple | object | None = _getHandle(handle) if handle is not None else None
+            newHandle = _getHandle(handle) if handle is not None else None
         except Exception:
-            self._handle = None
+            newHhandle = None
         if self._handle is None and (onSet is None or onQuery is None):
             raise ValueError
-        BaseClass.__init__(self, handle=handle, onQuery=onQuery, onSet=onSet)
+        BaseClass.__init__(self, handle=newHandle, onQuery=onQuery, onSet=onSet)
 
 
 class WindowBox(BaseClass):
