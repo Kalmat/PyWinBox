@@ -690,7 +690,7 @@ class ScreenBox(BaseClass):
         It can raise ValueError if wrong parameters are passed.
         """
         if ((not isinstance(box, Box) and (not isinstance(box, tuple) or (isinstance(box, tuple) and len(box) != 4)))
-                or not isinstance(onQuery, Callable) or not isinstance(onSet, Callable)):
+                or not callable(onQuery) or not callable(onSet)):
             raise ValueError
         if not isinstance(box, Box):
             box = Box(*box)
