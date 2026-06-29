@@ -143,7 +143,7 @@ class BaseClass:
         self._box :Box = box or Box(0, 0, 0, 0)
         self._onQuery: Callable[[], Box] = onQuery or self.onQuery
         self._onSet: Callable[[Box], None] = onSet or self.onSet
-        self._clamp = None
+        self._clamp: Box | None = None
 
     def onQuery(self) -> Box:
         """
