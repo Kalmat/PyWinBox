@@ -189,13 +189,13 @@ Other object-related useful features:
 
 General functions that can be used at module-level (no class object required)
 
-| Property       | Description                                    |
-|----------------|------------------------------------------------|
-| `collidepoint` | Check if a box is within another box           |
-| `collidebox`   | Check if a box collides to another box         |
-| `contains`     | Check if a box is contained within another box |
-| `clip`         | Return intersection box between two boxes      |
-| `union`        | Return box which contains two given boxes      |
+| Property       | Description                                     |
+|----------------|-------------------------------------------------|
+| `collidepoint` | Check if a point `(x, y)` is within another box |
+| `collidebox`   | Check if a box collides to another box          |
+| `contains`     | Check if a box is contained within another box  |
+| `clip`         | Return intersection box between two boxes       |
+| `union`        | Return box which contains two given boxes       |
 
 ---
 

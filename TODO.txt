@@ -1,1 +1,1 @@
-- Handle multi-monitor box
+- Check properly handling when passing a multi-monitor box at instantiation time

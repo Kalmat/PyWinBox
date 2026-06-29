@@ -143,7 +143,7 @@ class BaseClass:
         self._box :Box = box or Box(0, 0, 0, 0)
         self._onQuery: Callable[[], Box] = onQuery or self.onQuery
         self._onSet: Callable[[Box], None] = onSet or self.onSet
-        self._clamp = None
+        self._clamp: Box | None = None
 
     def onQuery(self) -> Box:
         """
@@ -548,6 +548,7 @@ class BaseClass:
         if not isinstance(boundary, Box):
             boundary = Box(*boundary)
         self._clamp = boundary
+        self.fit(self._clamp)
 
     def isclamped(self) -> bool:
         """
@@ -569,7 +570,8 @@ class BaseClass:
         """
         if not isinstance(box, Box):
             box = Box(*box)
-        self._box = box
+        self._box = self._onQuery()
+        self._box = self._clamp_box(self._box, box)
         self._onSet(self._box)
 
 
