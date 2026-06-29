@@ -1,18 +1,17 @@
 #!/usr/bin/env python
-
 # Lawrence Akka - https://sourceforge.net/p/pyobjc/mailman/pyobjc-dev/thread/0B4BC391-6491-445D-92D0-7B1CEF6F51BE%40me.com/#msg27726282
 
-# We need to import the relevant object definitions from PyObjC
-
 import sys
-
-import pywinbox
-
 if sys.platform != "darwin":
     raise OSError(f"Cannot import {__name__} on {sys.platform}")
 
+import os
 import time
+import traceback
 
+import pywinbox
+
+# We need to import the relevant object definitions from PyObjC
 from AppKit import (
     NSApp, NSObject, NSApplication, NSMakeRect, NSWindow, NSWindowStyleMaskTitled, NSWindowStyleMaskClosable,
     NSWindowStyleMaskMiniaturizable, NSWindowStyleMaskResizable, NSBackingStoreBuffered)
@@ -30,6 +29,20 @@ class Delegate(NSObject):
 
     def applicationDidFinishLaunching_(self, aNotification: None) -> None:
         '''Called automatically when the application has launched'''
+        # PyObjC swallows exceptions raised inside delegate callbacks (only logging the type),
+        # so the window would never close and the app would hang forever.
+        # Catch everything, print the traceback, and force-exit nonzero so the test fails fast.
+        # We can't use NSApp().terminate_() (it exits 0) nor sys.exit() (SystemExit isn't an
+        # Exception subclass, so PyObjC swallows it too): os._exit() is the only reliable path.
+        try:
+            self._runChecks()
+        except Exception:
+            traceback.print_exc()
+            sys.stdout.flush()
+            sys.stderr.flush()
+            os._exit(1)
+
+    def _runChecks(self) -> None:
         # Set it as the frontmost application
         NSApp().activateIgnoringOtherApps_(True)
 
@@ -38,8 +51,17 @@ class Delegate(NSObject):
             handle = win
             print(win.title(), win.frame(), type(win.frame().origin))
         print()
+        assert handle is not None
 
-        myPyBox = pywinbox.PyWinBox(onQuery=None, onSet=None, handle=handle)
+        myPyBox = pywinbox.WindowBox(handle=handle, onQuery=None, onSet=None)
+
+        # macOS won't let a window's top edge rise above the menu bar, so any
+        # target whose top edge exceeds the usable screen height gets clamped.
+        # CI runners have a small headless display, so derive bottom targets
+        # from the actual screen height instead of assuming a tall desktop.
+        screenH = int(handle.screen().frame().size.height)
+        print("SCREEN", handle.screen().frame())
+        lowBottom = min(700, screenH - 100)
 
         timelap = 0.3
 
@@ -58,10 +80,10 @@ class Delegate(NSObject):
         time.sleep(timelap)
         assert myPyBox.top == 200
 
-        print("MOVE bottom = 800", myPyBox.box, myPyBox.rect)
-        myPyBox.bottom = 800
+        print(f"MOVE bottom = {lowBottom}", myPyBox.box, myPyBox.rect)
+        myPyBox.bottom = lowBottom
         time.sleep(timelap)
-        assert myPyBox.bottom == 800
+        assert myPyBox.bottom == lowBottom
 
         print("MOVE topleft = (300, 400)", myPyBox.box, myPyBox.rect)
         myPyBox.topleft = (300, 400)
@@ -73,10 +95,10 @@ class Delegate(NSObject):
         time.sleep(timelap)
         assert myPyBox.topright == (300, 400)
 
-        print("MOVE bottomleft = (300, 700)", myPyBox.box, myPyBox.rect)
-        myPyBox.bottomleft = (300, 700)
+        print(f"MOVE bottomleft = (300, {lowBottom})", myPyBox.box, myPyBox.rect)
+        myPyBox.bottomleft = (300, lowBottom)
         time.sleep(timelap)
-        assert myPyBox.bottomleft == (300, 700)
+        assert myPyBox.bottomleft == (300, lowBottom)
 
         print("MOVE bottomright = (1000, 200)", myPyBox.box, myPyBox.rect)
         myPyBox.bottomright = (1000, 200)
@@ -98,10 +120,10 @@ class Delegate(NSObject):
         time.sleep(timelap)
         assert myPyBox.midtop == (300, 400)
 
-        print("MOVE midbottom = (300, 700)", myPyBox.box, myPyBox.rect)
-        myPyBox.midbottom = (300, 700)
+        print(f"MOVE midbottom = (300, {lowBottom})", myPyBox.box, myPyBox.rect)
+        myPyBox.midbottom = (300, lowBottom)
         time.sleep(timelap)
-        assert myPyBox.midbottom == (300, 700)
+        assert myPyBox.midbottom == (300, lowBottom)
 
         print("MOVE center = (300, 400)", myPyBox.box, myPyBox.rect)
         myPyBox.center = (300, 400)
@@ -153,7 +175,7 @@ def demo() -> None:
     # ... and create its delegate.  Note the use of the
     # Objective C constructors below, because Delegate
     # is a subclass of an Objective C class, NSObject
-    delegate = Delegate.alloc().init()
+    delegate: Delegate = Delegate.alloc().init()
     # Tell the application which delegate object to use.
     a.setDelegate_(delegate)
 
@@ -173,6 +195,9 @@ def demo() -> None:
     w.orderFrontRegardless()
 
     # ... and start the application
+    # On success the window closes -> windowWillClose_ -> terminate_ (exits 0).
+    # On failure _runChecks' handler calls os._exit(1). Either way control does not
+    # return here, so there's nothing to do after a.run().
     a.run()
     #AppHelper.runEventLoop()
 

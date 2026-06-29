@@ -1,10 +1,15 @@
 #!/usr/bin/python
 from importlib.metadata import version as _importlib_version
 
-from ._main import Box, Rect, Point, Size, pointInBox, PyWinBox
+from ._main import (Box, Rect, Point, Size,
+                    PyWinBox, WindowBox, ScreenBox,
+                    pointInBox, collidepoint, collidebox, contains, clip, union)
 
 __all__ = [
-    "version", "PyWinBox", "Box", "Rect", "Point", "Size", "pointInBox"
+    "version",
+    "Box", "Rect", "Point", "Size",
+    "PyWinBox", "WindowBox", "ScreenBox",
+    "pointInBox", "collidepoint", "collidebox", "contains", "clip", "union"
 ]
 
 __version__ = _importlib_version("pywinctl")
