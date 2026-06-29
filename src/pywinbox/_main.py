@@ -624,7 +624,7 @@ class PyWinBox(BaseClass):
         try:
             newHandle = _getHandle(handle) if handle is not None else None
         except Exception:
-            newHhandle = None
+            newHandle = None
         if self._handle is None and (onSet is None or onQuery is None):
             raise ValueError
         BaseClass.__init__(self, handle=newHandle, onQuery=onQuery, onSet=onSet)
