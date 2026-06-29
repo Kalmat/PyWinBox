@@ -1,8 +1,11 @@
-0.8, 2026/XX/XX -- WIN32: Replaced bare `except:` clauses with `except Exception:`, preventing accidental suppression of system-exit signals (KeyboardInterrupt, SystemExit) during error handling.
-                   ALL: Removed unused dependency on `typing_extensions`
+0.8, 2026/XX/XX -- WIN32: Replaced bare `except (thanks to Avasam):` clauses with `except Exception:`, preventing accidental suppression of system-exit signals (KeyboardInterrupt, SystemExit) during error handling.
+                   ALL: Removed unused dependency on `typing_extensions` (thanks to Avasam - https://github.com/Avasam)
+                   ALL: Deprecated PyWinBox class in favor of WindowBox (window areas) and ScreenBox (screen areas)
+                   ALL: Added general functions: collidepoint, collidebox, contains, clip, union
+                   ALL: Added class methods: collidepoint, collidebox, contains, clip, union, move, inflate, clamp, isclamped, unclamp, fit
 0.7, 2024/03/22 -- LINUX: Added ewmhlib as separate module. (Really) Fixed position and size for GNOME (by using GTK_EXTENTS)
 0.6, 2023/10/12 -- LINUX: Improved position and size for GNOME (by using GTK_EXTENTS)
-                   WIN32: Fixed GetAwarenessFromDpiAwarenessContext not supported on Windows Server
+                   WIN32: Fixed GetAwarenessFromDpiAwarenessContext not supported on Windows Server (thanks to popoiPIO - https://github.com/poipoiPIO)
 0.5, 2023/09/06 -- MACOS: Tested OK in multi-monitor setup
 0.4, 2023/08/25 -- Reorganized to avoid IDEs showing external and / or private elements
 0.3, 2023/08/21 -- Linux: Improved window geometry (thanks to elraymond - https://github.com/elraymond)

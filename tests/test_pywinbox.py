@@ -8,50 +8,49 @@ import sys
 import time
 from typing import TypedDict
 
-import pywinctl
-
 import pywinbox
+import pywinctl as pwc
 
 
 class GetWindowKwargs(TypedDict):
     title: str
-    condition: int  # TODO: Consider making pywinctl.Re an IntEnum
+    condition: int
 
 
 def test_basic() -> None:
     if sys.platform == "win32":
         process = "notepad"
         get_window_kwargs: GetWindowKwargs = {
-            "title": "Notepad",
-            "condition": pywinctl.Re.ENDSWITH,
+            "title": "Notepad|Bloc de notas",
+            "condition": pwc.Re.MATCH,
         }
     elif sys.platform == "linux":
         process = "gedit"
         get_window_kwargs: GetWindowKwargs = {
             "title": "gedit",
-            "condition": pywinctl.Re.ENDSWITH,
+            "condition": pwc.Re.ENDSWITH,
         }
     elif sys.platform == "darwin":
-        if not pywinctl.checkPermissions(activate=True):
+        if not pwc.checkPermissions(activate=True):
             exit()
         process = ["open", "-a", "TextEdit", __file__]
         get_window_kwargs: GetWindowKwargs = {
             "title": os.path.basename(__file__),
-            "condition": pywinctl.Re.IS,
+            "condition": pwc.Re.IS,
         }
     else:
         raise NotImplementedError(
-            "PyWinCtl currently does not support this platform. "
-            + "If you have useful knowledge, please contribute! https://github.com/Kalmat/PyWinCtl"
+            "PyWinBox currently does not support this platform. "
+            + "If you have useful knowledge, please contribute! https://github.com/Kalmat/PyWinBox"
         )
 
     subprocess.Popen(process)
 
-    testWindows: list[pywinctl.Window] = []
+    testWindows: list[pwc.Window] = []
     deadline = time.time() + 15
     while not testWindows and time.time() < deadline:
         time.sleep(0.5)
-        testWindows = pywinctl.getWindowsWithTitle(**get_window_kwargs)
+        testWindows = pwc.getWindowsWithTitle(**get_window_kwargs)
     assert len(testWindows) == 1
 
     npw = testWindows[0]
@@ -66,9 +65,9 @@ def test_basic() -> None:
     npw.size = (600, 400)
 
     if sys.platform == "darwin":
-        myPyBox = pywinbox.PyWinBox(onQuery=None, onSet=None, handle=(npw.getAppName(), npw.title or ""))
+        myPyBox = pywinbox.WindowBox(handle=(npw.getAppName(), npw.title or ""), onQuery=None, onSet=None)
     else:
-        myPyBox = pywinbox.PyWinBox(onQuery=None, onSet=None, handle=npw.getHandle())
+        myPyBox = pywinbox.WindowBox(handle=npw.getHandle(), onQuery=None, onSet=None)
 
     print("INIT", npw.box, npw.rect)
 

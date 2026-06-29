@@ -1,18 +1,14 @@
 #!/usr/bin/env python
-
 # Lawrence Akka - https://sourceforge.net/p/pyobjc/mailman/pyobjc-dev/thread/0B4BC391-6491-445D-92D0-7B1CEF6F51BE%40me.com/#msg27726282
-
-# We need to import the relevant object definitions from PyObjC
 
 import os
 import sys
+import time
 import traceback
 
 import pywinbox
 
-
-import time
-
+# We need to import the relevant object definitions from PyObjC
 from AppKit import (
     NSApp, NSObject, NSApplication, NSMakeRect, NSWindow, NSWindowStyleMaskTitled, NSWindowStyleMaskClosable,
     NSWindowStyleMaskMiniaturizable, NSWindowStyleMaskResizable, NSBackingStoreBuffered)
@@ -54,7 +50,7 @@ class Delegate(NSObject):
         print()
         assert handle is not None
 
-        myPyBox = pywinbox.PyWinBox(onQuery=None, onSet=None, handle=handle)
+        myPyBox = pywinbox.WindowBox(handle=handle, onQuery=None, onSet=None)
 
         # macOS won't let a window's top edge rise above the menu bar, so any
         # target whose top edge exceeds the usable screen height gets clamped.

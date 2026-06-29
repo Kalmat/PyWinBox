@@ -11,8 +11,8 @@ Documentation = "https://pywinbox.readthedocs.io/"
 
 [project]
 name = "PyWinBox"
-version = "0.7"
-description = "Cross-Platform and multi-monitor toolkit to handle rectangular areas and windows box"
+version = "0.8"
+description = "Cross-platform Python module to manage window and rectangular screen areas — with full property access, live callbacks, and multi-monitor support."
 authors = [{ name = "Kalmat", email = "palookjones@gmail.com" }]
 readme = "README.md"
 license = "BSD-3-Clause"
@@ -72,7 +72,6 @@ docs = ["myst-parser"]
 dev = [
     { include-group = "docs" },
     "ruff>=0.15.16",
-    "ewmhlib",
     "pywinctl>=0.3",
     "mypy>=0.990,<2",
     "types-python-xlib>=0.32",
