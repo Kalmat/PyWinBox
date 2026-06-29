@@ -141,8 +141,8 @@ class BaseClass:
 
         self._handle :int | NamedTuple | object | None = handle
         self._box :Box = box or Box(0, 0, 0, 0)
-        self._onQuery: Callable[[], Box] | None = onQuery or self.onQuery
-        self._onSet: Callable[[Box], None] | None = onSet or self.onSet
+        self._onQuery: Callable[[], Box] = onQuery or self.onQuery
+        self._onSet: Callable[[Box], None] = onSet or self.onSet
         self._clamp = None
 
     def onQuery(self) -> Box:
@@ -666,10 +666,10 @@ class WindowBox(BaseClass):
         It can raise ValueError if not valid window handle is passed
         """
         try:
-            self._handle: int | str | NamedTuple | object = _getHandle(handle)
+            handle: int | str | NamedTuple | object = _getHandle(handle)
         except Exception:
-            self._handle = None
-        if self._handle is None:
+            handle = None
+        if handle is None:
             raise ValueError
         BaseClass.__init__(self, handle=handle, onQuery=onQuery, onSet=onSet)
 
