@@ -135,11 +135,11 @@ def union(box1: Box | tuple[int, int, int, int], box2: Box | tuple[int, int, int
 class BaseClass:
 
     def __init__(self,
-                 handle :int | str | NamedTuple | object | None = None,
+                 handle = None,
                  box :Box | None = None,
                  onQuery :Callable[[], Box] | None = None, onSet :Callable[[Box], None] | None = None) -> None:
 
-        self._handle :int | NamedTuple | object | None = handle
+        self._handle = handle
         self._box :Box = box or Box(0, 0, 0, 0)
         self._onQuery: Callable[[], Box] = onQuery or self.onQuery
         self._onSet: Callable[[Box], None] = onSet or self.onSet
@@ -633,7 +633,7 @@ class PyWinBox(BaseClass):
 class WindowBox(BaseClass):
 
     def __init__(self,
-                 handle: int | str | NamedTuple | object,
+                 handle,
                  onQuery: Callable[[], Box] | None = None, onSet: Callable[[Box], None] | None = None) -> None:
         """
         Class to access all window box properties.
@@ -666,12 +666,12 @@ class WindowBox(BaseClass):
         It can raise ValueError if not valid window handle is passed
         """
         try:
-            handle: int | str | NamedTuple | object = _getHandle(handle)
+            newHandle = _getHandle(handle)
         except Exception:
-            handle = None
-        if handle is None:
+            newHandle = None
+        if newHandle is None:
             raise ValueError
-        BaseClass.__init__(self, handle=handle, onQuery=onQuery, onSet=onSet)
+        BaseClass.__init__(self, handle=newHandle, onQuery=onQuery, onSet=onSet)
 
 
 class ScreenBox(BaseClass):
