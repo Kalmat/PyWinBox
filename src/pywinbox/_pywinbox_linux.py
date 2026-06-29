@@ -1,12 +1,12 @@
 #!/usr/bin/python
 from __future__ import annotations
 
-import os
 import sys
 
 if sys.platform != "linux":
     raise OSError(f"Cannot import {__name__} on {sys.platform}")
 
+import os
 from Xlib.xobject.drawable import Window as XWindow
 
 from ._main import Box

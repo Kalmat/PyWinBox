@@ -574,6 +574,7 @@ class BaseClass:
 
 
 class PyWinBox(BaseClass):
+
     def __init__(self,
                  onQuery: Callable[[], Box] | None = None, onSet: Callable[[Box], None] | None = None,
                  handle = None) -> None:
