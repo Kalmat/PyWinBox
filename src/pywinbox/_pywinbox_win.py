@@ -2,14 +2,21 @@
 from __future__ import annotations
 
 import sys
-assert sys.platform == "win32"
 
-from typing import TypeAlias, Union
+try:
+    from typing import TypeAlias
+except Exception:
+    from typing import TYPE_CHECKING
+    if TYPE_CHECKING:
+        from typing_extensions import TypeAlias
+from typing import Union
 
 import ctypes
 import win32gui
 
 from ._main import Box
+
+assert sys.platform == "win32"
 
 
 # Thanks to poipoiPIO (https://github.com/poipoiPIO) for his HELP!!!

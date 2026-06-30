@@ -3,15 +3,21 @@
 # mypy: disable_error_code = no-any-return
 from __future__ import annotations
 
-import sys
-assert sys.platform == "darwin"
-
 import subprocess
+import sys
+
+try:
+    from typing import TypeAlias
+except Exception:
+    from typing import TYPE_CHECKING
+    if TYPE_CHECKING:
+        from typing_extensions import TypeAlias
 from typing import NamedTuple, cast, TypeAlias, Union
 
+from ._main import Box
 import AppKit
 
-from ._main import Box
+assert sys.platform == "darwin"
 
 
 class _macOSNSHandle(NamedTuple):

@@ -2,23 +2,30 @@
 from __future__ import annotations
 
 import sys
-assert sys.platform == "linux"
-
 import os
-from typing import TypeAlias, Union
+
+try:
+    from typing import TypeAlias
+except Exception:
+    from typing import TYPE_CHECKING
+    if TYPE_CHECKING:
+        from typing_extensions import TypeAlias
+from typing import Union
 
 from Xlib.xobject.drawable import Window as XWindow
 
 from ._main import Box
 from ewmhlib import EwmhWindow
 
+assert sys.platform == "linux"
 
-_HandleTypeIn :TypeAlias = Union[int, XWindow, None]
-_HandleTypeOut :TypeAlias = Union[EwmhWindow, None]
+
+_HandleTypeIn: TypeAlias = Union[int, XWindow, None]
+_HandleTypeOut: TypeAlias = Union[EwmhWindow, None]
 
 
 def _getHandle(handle: _HandleTypeIn) -> _HandleTypeOut:
-    newHandle :_HandleTypeOut = None
+    newHandle: _HandleTypeOut = None
     if isinstance(handle, int):
         newHandle = EwmhWindow(handle)
     elif isinstance(handle, XWindow):
