@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 # Lawrence Akka - https://sourceforge.net/p/pyobjc/mailman/pyobjc-dev/thread/0B4BC391-6491-445D-92D0-7B1CEF6F51BE%40me.com/#msg27726282
 
-import os
 import sys
+if sys.platform != "darwin":
+    raise OSError(f"Cannot import {__name__} on {sys.platform}")
+
+import os
 import time
 import traceback
 

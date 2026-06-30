@@ -72,6 +72,7 @@ docs = ["myst-parser"]
 dev = [
     { include-group = "docs" },
     "ruff>=0.15.16",
+    "ewmhlib", # Get type information even when not working on Linux
     "pywinctl>=0.3",
     "mypy>=0.990,<2",
     "types-python-xlib>=0.32",
