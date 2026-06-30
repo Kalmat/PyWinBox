@@ -1,10 +1,11 @@
 #!/usr/bin/python
 from __future__ import annotations
 
-import os
 import sys
 assert sys.platform == "linux"
 
+import os
+from typing import TypeAlias, Union
 
 from Xlib.xobject.drawable import Window as XWindow
 
@@ -12,9 +13,12 @@ from ._main import Box
 from ewmhlib import EwmhWindow
 
 
-def _getHandle(handle: int | XWindow) -> EwmhWindow | None:
+_HandleTypeIn :TypeAlias = Union[int, XWindow, None]
+_HandleTypeOut :TypeAlias = Union[EwmhWindow, None]
 
-    newHandle = None
+
+def _getHandle(handle: _HandleTypeIn) -> _HandleTypeOut:
+    newHandle :_HandleTypeOut = None
     if isinstance(handle, int):
         newHandle = EwmhWindow(handle)
     elif isinstance(handle, XWindow):

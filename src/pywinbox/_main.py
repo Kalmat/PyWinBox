@@ -135,11 +135,11 @@ def union(box1: Box | tuple[int, int, int, int], box2: Box | tuple[int, int, int
 class BaseClass:
 
     def __init__(self,
-                 handle = None,
+                 handle :_HandleTypeOut = None,
                  box :Box | None = None,
                  onQuery :Callable[[], Box] | None = None, onSet :Callable[[Box], None] | None = None) -> None:
 
-        self._handle = handle
+        self._handle :_HandleTypeOut = handle
         self._box :Box = box or Box(0, 0, 0, 0)
         self._onQuery: Callable[[], Box] = onQuery or self.onQuery
         self._onSet: Callable[[Box], None] = onSet or self.onSet
@@ -192,9 +192,10 @@ class BaseClass:
 
         :param newBox: target position and or size in Box struct format (x, y, width, height)
         """
+        if self._clamp is not None:
+            newBox = self._clamp_box(newBox, self._clamp)
+            self._box = newBox
         if self._handle is not None:
-            if self._clamp is not None:
-                newBox = self._clamp_box(newBox, self._clamp)
             _moveResizeWindow(self._handle, newBox)
 
     def __repr__(self) -> str:
@@ -543,6 +544,8 @@ class BaseClass:
         """
         Define boundaries as Box structure to keep window/area inside.
 
+        window/screen area will be immediately fit to given boundary.
+
         :param boundary: Boundaries structure (left, top, width, height)
         """
         if not isinstance(boundary, Box):
@@ -566,7 +569,7 @@ class BaseClass:
 
     def fit(self, box: Box | tuple[int, int, int, int]) -> None:
         """
-        Re-scale window/area so it fits into box structure.
+        Re-scale and move window/area so it fits into box structure.
         """
         if not isinstance(box, Box):
             box = Box(*box)
@@ -579,7 +582,7 @@ class PyWinBox(BaseClass):
 
     def __init__(self,
                  onQuery: Callable[[], Box] | None = None, onSet: Callable[[Box], None] | None = None,
-                 handle = None) -> None:
+                 handle :_HandleTypeIn = None) -> None:
         """
         THIS CLASS IS FOR RETRO-COMPATIBILITY ONLY. Use WindowBox (window area) or ScreenBox (rectangular area) instead.
 
@@ -624,18 +627,18 @@ class PyWinBox(BaseClass):
         warnings.warn('PyWinBox class is deprecated. Use WindowBox (window area) or ScreenBox (rectangular area) instead',
                       DeprecationWarning, stacklevel=2)
         try:
-            newHandle = _getHandle(handle) if handle is not None else None
+            newHandle: _HandleTypeOut = _getHandle(handle) if handle is not None else None
         except Exception:
             newHandle = None
         if newHandle is None and (onSet is None or onQuery is None):
             raise ValueError
-        BaseClass.__init__(self, handle=newHandle, onQuery=onQuery, onSet=onSet)
+        super().__init__(handle=newHandle, onQuery=onQuery, onSet=onSet)
 
 
 class WindowBox(BaseClass):
 
     def __init__(self,
-                 handle,
+                 handle :_HandleTypeIn,
                  onQuery: Callable[[], Box] | None = None, onSet: Callable[[Box], None] | None = None) -> None:
         """
         Class to access all window box properties.
@@ -668,12 +671,12 @@ class WindowBox(BaseClass):
         It can raise ValueError if not valid window handle is passed
         """
         try:
-            newHandle = _getHandle(handle)
+            newHandle: _HandleTypeOut = _getHandle(handle)
         except Exception:
             newHandle = None
         if newHandle is None:
             raise ValueError
-        BaseClass.__init__(self, handle=newHandle, onQuery=onQuery, onSet=onSet)
+        super().__init__(handle=newHandle, onQuery=onQuery, onSet=onSet)
 
 
 class ScreenBox(BaseClass):
@@ -696,17 +699,19 @@ class ScreenBox(BaseClass):
             raise ValueError
         if not isinstance(box, Box):
             box = Box(*box)
-        BaseClass.__init__(self, box=box, onQuery=onQuery, onSet=onSet)
+        super().__init__(box=box, onQuery=onQuery, onSet=onSet)
 
 
 if sys.platform == "darwin":
-    from ._pywinbox_macos import (_getHandle, _getWindowBox, _moveResizeWindow)
+    from ._pywinbox_macos import (_getHandle, _getWindowBox, _moveResizeWindow, _HandleTypeIn, _HandleTypeOut)
 
 elif sys.platform == "win32":
-    from ._pywinbox_win import (_getHandle, _getWindowBox, _moveResizeWindow)
+    from ._pywinbox_win import (_getHandle, _getWindowBox, _moveResizeWindow, _HandleTypeIn, _HandleTypeOut)
 
 elif sys.platform == "linux":
-    from ._pywinbox_linux import (_getHandle, _getWindowBox, _moveResizeWindow)
+    from ._pywinbox_linux import (_getHandle, _getWindowBox, _moveResizeWindow, _HandleTypeIn, _HandleTypeOut)
 
 else:
     raise NotImplementedError('PyWinBox currently does not support this platform. If you think you can help, please contribute! https://github.com/Kalmat/PyWinBox')
+_HandleTypeIn = _HandleTypeIn
+_HandleTypeOut = _HandleTypeOut

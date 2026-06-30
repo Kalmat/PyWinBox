@@ -4,11 +4,10 @@
 from __future__ import annotations
 
 import sys
-
 assert sys.platform == "darwin"
 
 import subprocess
-from typing import NamedTuple, cast
+from typing import NamedTuple, cast, TypeAlias, Union
 
 import AppKit
 
@@ -26,8 +25,12 @@ class _macOSCGHandle(NamedTuple):
     windowTitle: str
 
 
-def _getHandle(handle) -> _macOSCGHandle | _macOSNSHandle | None:
-    newHandle = None
+_HandleTypeIn :TypeAlias = Union[tuple[str, str], AppKit.NSWindow, None]
+_HandleTypeOut :TypeAlias = Union[_macOSNSHandle, _macOSCGHandle, None]
+
+
+def _getHandle(handle :_HandleTypeIn) -> _HandleTypeOut:
+    newHandle :_HandleTypeOut = None
     if isinstance(handle, tuple):
         app, window = handle
         if isinstance(app, str) and isinstance(window, str):

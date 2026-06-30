@@ -2,9 +2,9 @@
 from __future__ import annotations
 
 import sys
-
 assert sys.platform == "win32"
 
+from typing import TypeAlias, Union
 
 import ctypes
 import win32gui
@@ -23,8 +23,12 @@ if dpiAware == 0:
     ctypes.windll.shcore.SetProcessDpiAwareness(1)
 
 
-def _getHandle(handle: int | str) -> int | None:
-    newHandle = None
+_HandleTypeIn :TypeAlias = Union[int, str, None]
+_HandleTypeOut :TypeAlias = Union[int, None]
+
+
+def _getHandle(handle: _HandleTypeIn) -> _HandleTypeOut:
+    newHandle :_HandleTypeOut = None
     if isinstance(handle, str):
         try:
             newHandle = int(handle, base=16)
