@@ -3,6 +3,10 @@ from __future__ import annotations
 
 import sys
 
+import ctypes
+
+from ._main import Box
+
 try:
     from typing import TypeAlias
 except Exception:
@@ -11,12 +15,13 @@ except Exception:
         from typing_extensions import TypeAlias
 from typing import Union
 
-import ctypes
-import win32gui
-
-from ._main import Box
-
-assert sys.platform == "win32"
+try:
+    import win32gui
+except Exception:
+    # This raises the OS exception
+    assert sys.platform == "win32"
+    # This raises win32gui not installed exception (when OS is correct)
+    import win32gui
 
 
 # Thanks to poipoiPIO (https://github.com/poipoiPIO) for his HELP!!!

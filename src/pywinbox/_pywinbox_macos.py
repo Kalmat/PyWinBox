@@ -6,6 +6,8 @@ from __future__ import annotations
 import subprocess
 import sys
 
+from ._main import Box
+
 try:
     from typing import TypeAlias
 except Exception:
@@ -14,10 +16,13 @@ except Exception:
         from typing_extensions import TypeAlias
 from typing import NamedTuple, cast, Union
 
-from ._main import Box
-import AppKit
-
-assert sys.platform == "darwin"
+try:
+    import AppKit
+except Exception:
+    # This raises the OS exception
+    assert sys.platform == "darwin"
+    # This raises AppKit not installed exception (when OS is correct)
+    import AppKit
 
 
 class _macOSNSHandle(NamedTuple):
