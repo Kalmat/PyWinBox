@@ -2,12 +2,15 @@
 from __future__ import annotations
 
 import sys
+if sys.platform != "win32":
+    raise OSError(f"Cannot import {__name__} on {sys.platform}")
 
 import ctypes
 
 from ._main import Box
 
 try:
+    # TypeAlias does not exist in typing for Python3.9
     from typing import TypeAlias
 except Exception:
     from typing import TYPE_CHECKING
@@ -15,13 +18,7 @@ except Exception:
         from typing_extensions import TypeAlias
 from typing import Union
 
-try:
-    import win32gui
-except Exception:
-    # This raises the OS exception
-    assert sys.platform == "win32"
-    # This raises win32gui not installed exception (when OS is correct)
-    import win32gui
+import win32gui
 
 
 # Thanks to poipoiPIO (https://github.com/poipoiPIO) for his HELP!!!

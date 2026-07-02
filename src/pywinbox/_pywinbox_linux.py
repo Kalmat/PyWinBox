@@ -2,11 +2,15 @@
 from __future__ import annotations
 
 import sys
+if sys.platform != "linux":
+    raise OSError(f"Cannot import {__name__} on {sys.platform}")
+
 import os
 
 from ._main import Box
 
 try:
+    # TypeAlias does not exist in typing for Python3.9
     from typing import TypeAlias
 except Exception:
     from typing import TYPE_CHECKING
@@ -14,15 +18,8 @@ except Exception:
         from typing_extensions import TypeAlias
 from typing import Union
 
-try:
-    from Xlib.xobject.drawable import Window as XWindow
-    from ewmhlib import EwmhWindow
-except Exception:
-    # This raises the OS exception
-    assert sys.platform == "linux"
-    # This raises Xlib/ewmhlib not installed exception (when OS is correct)
-    from Xlib.xobject.drawable import Window as XWindow
-    from ewmhlib import EwmhWindow
+from Xlib.xobject.drawable import Window as XWindow
+from ewmhlib import EwmhWindow
 
 
 _HandleTypeIn: TypeAlias = Union[int, XWindow, None]
