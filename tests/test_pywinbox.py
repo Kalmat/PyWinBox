@@ -13,7 +13,7 @@ import pywinctl as pwc
 
 class GetWindowKwargs(TypedDict):
     title: str
-    condition: int  # TODO: Consider making pywinctl.Re an IntEnum
+    condition: int
 
 
 def test_basic() -> None:
@@ -39,9 +39,8 @@ def test_basic() -> None:
         }
     else:
         raise NotImplementedError(
-            "PyWinBox currently does not support this platform. "
-            + "If you have useful knowledge, please contribute! https://github.com/Kalmat/PyWinBox"
-        )
+            "PyWinBox currently does not support this platform. " +
+            "If you have useful knowledge, please contribute! https://github.com/Kalmat/PyWinBox")
 
     subprocess.Popen(process)
 
@@ -60,13 +59,19 @@ def test_basic() -> None:
     if npw.isMaximized:  # Make sure it starts un-maximized
         npw.restore(wait=wait)
     assert not npw.isMaximized
-    
+
     npw.size = (600, 400)
 
     if sys.platform == "darwin":
-        myPyBox = pywinbox.WindowBox(handle=(npw.getAppName(), npw.title or ""), onQuery=None, onSet=None)
+        myPyBox = pywinbox.WindowBox(
+            handle=(
+                npw.getAppName(),
+                npw.title or ""),
+            onQuery=None,
+            onSet=None)
     else:
-        myPyBox = pywinbox.WindowBox(handle=npw.getHandle(), onQuery=None, onSet=None)
+        myPyBox = pywinbox.WindowBox(
+            handle=npw.getHandle(), onQuery=None, onSet=None)
 
     print("INIT", npw.box, npw.rect)
 

@@ -2,27 +2,20 @@
 from __future__ import annotations
 
 import sys
+if sys.platform != "linux":
+    raise OSError(f"Cannot import {__name__} on {sys.platform}")
+
 import os
+
+from typing import Union, TYPE_CHECKING
+if TYPE_CHECKING:
+    # TypeAlias does not exist in typing for Python 3.9
+    from typing_extensions import TypeAlias
 
 from ._main import Box
 
-try:
-    from typing import TypeAlias
-except Exception:
-    from typing import TYPE_CHECKING
-    if TYPE_CHECKING:
-        from typing_extensions import TypeAlias
-from typing import Union
-
-try:
-    from Xlib.xobject.drawable import Window as XWindow
-    from ewmhlib import EwmhWindow
-except Exception:
-    # This raises the OS exception
-    assert sys.platform == "linux"
-    # This raises Xlib/ewmhlib not installed exception (when OS is correct)
-    from Xlib.xobject.drawable import Window as XWindow
-    from ewmhlib import EwmhWindow
+from Xlib.xobject.drawable import Window as XWindow
+from ewmhlib import EwmhWindow
 
 
 _HandleTypeIn: TypeAlias = Union[int, XWindow, None]
@@ -81,5 +74,10 @@ def _moveResizeWindow(handle: EwmhWindow, newBox: Box):
     # If not in GNOME: best guess is to trust pos and geom from above
     # NOTE: if you have this case and are not getting the expected result,
     #       please open an issue: https://github.com/Kalmat/PyWinBox/issues/new
-    handle.setMoveResize(x=newLeft, y=newTop, width=newWidth, height=newHeight, userAction=True)
+    handle.setMoveResize(
+        x=newLeft,
+        y=newTop,
+        width=newWidth,
+        height=newHeight,
+        userAction=True)
     # handle.configure(x=newLeft, y=newTop, width=newWidth, height=newHeight)

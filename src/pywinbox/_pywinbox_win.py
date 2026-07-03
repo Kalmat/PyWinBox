@@ -2,45 +2,40 @@
 from __future__ import annotations
 
 import sys
+if sys.platform != "win32":
+    raise OSError(f"Cannot import {__name__} on {sys.platform}")
 
 import ctypes
 
+from typing import Union, TYPE_CHECKING
+if TYPE_CHECKING:
+    # TypeAlias does not exist in typing for Python 3.9
+    from typing_extensions import TypeAlias
+
 from ._main import Box
 
-try:
-    from typing import TypeAlias
-except Exception:
-    from typing import TYPE_CHECKING
-    if TYPE_CHECKING:
-        from typing_extensions import TypeAlias
-from typing import Union
-
-try:
-    import win32gui
-except Exception:
-    # This raises the OS exception
-    assert sys.platform == "win32"
-    # This raises win32gui not installed exception (when OS is correct)
-    import win32gui
+import win32gui
 
 
 # Thanks to poipoiPIO (https://github.com/poipoiPIO) for his HELP!!!
 try:
-    dpiAware = ctypes.windll.user32.GetAwarenessFromDpiAwarenessContext(ctypes.windll.user32.GetThreadDpiAwarenessContext())
+    dpiAware = ctypes.windll.user32.GetAwarenessFromDpiAwarenessContext(
+        ctypes.windll.user32.GetThreadDpiAwarenessContext())
 except AttributeError:  # Windows server does not implement GetAwarenessFromDpiAwarenessContext
     dpiAware = 0
 
 if dpiAware == 0:
-    # It seems that this can't be invoked twice. Setting it to 1 for apps having 0 (unaware) may have less impact
+    # It seems that this can't be invoked twice. Setting it to 1 for apps
+    # having 0 (unaware) may have less impact
     ctypes.windll.shcore.SetProcessDpiAwareness(1)
 
 
-_HandleTypeIn :TypeAlias = Union[int, str, None]
-_HandleTypeOut :TypeAlias = Union[int, None]
+_HandleTypeIn: TypeAlias = Union[int, str, None]
+_HandleTypeOut: TypeAlias = Union[int, None]
 
 
 def _getHandle(handle: _HandleTypeIn) -> _HandleTypeOut:
-    newHandle :_HandleTypeOut = None
+    newHandle: _HandleTypeOut = None
     if isinstance(handle, str):
         try:
             newHandle = int(handle, base=16)
@@ -57,4 +52,10 @@ def _getWindowBox(handle: int) -> Box:
 
 
 def _moveResizeWindow(handle: int, newBox: Box):
-    win32gui.MoveWindow(handle, newBox.left, newBox.top, newBox.width, newBox.height, True)
+    win32gui.MoveWindow(
+        handle,
+        newBox.left,
+        newBox.top,
+        newBox.width,
+        newBox.height,
+        True)

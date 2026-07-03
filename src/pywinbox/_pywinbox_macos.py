@@ -3,26 +3,19 @@
 # mypy: disable_error_code = no-any-return
 from __future__ import annotations
 
-import subprocess
 import sys
+if sys.platform != "darwin":
+    raise OSError(f"Cannot import {__name__} on {sys.platform}")
+
+import subprocess
+from typing import NamedTuple, cast, Union, TYPE_CHECKING
+if TYPE_CHECKING:
+    # TypeAlias does not exist in typing for Python 3.9
+    from typing_extensions import TypeAlias
 
 from ._main import Box
 
-try:
-    from typing import TypeAlias
-except Exception:
-    from typing import TYPE_CHECKING
-    if TYPE_CHECKING:
-        from typing_extensions import TypeAlias
-from typing import NamedTuple, cast, Union
-
-try:
-    import AppKit
-except Exception:
-    # This raises the OS exception
-    assert sys.platform == "darwin"
-    # This raises AppKit not installed exception (when OS is correct)
-    import AppKit
+import AppKit
 
 
 class _macOSNSHandle(NamedTuple):
@@ -36,12 +29,12 @@ class _macOSCGHandle(NamedTuple):
     windowTitle: str
 
 
-_HandleTypeIn :TypeAlias = Union[tuple[str, str], AppKit.NSWindow, None]
-_HandleTypeOut :TypeAlias = Union[_macOSNSHandle, _macOSCGHandle, None]
+_HandleTypeIn: TypeAlias = Union[tuple[str, str], AppKit.NSWindow, None]
+_HandleTypeOut: TypeAlias = Union[_macOSNSHandle, _macOSCGHandle, None]
 
 
-def _getHandle(handle :_HandleTypeIn) -> _HandleTypeOut:
-    newHandle :_HandleTypeOut = None
+def _getHandle(handle: _HandleTypeIn) -> _HandleTypeOut:
+    newHandle: _HandleTypeOut = None
     if isinstance(handle, tuple):
         app, window = handle
         if isinstance(app, str) and isinstance(window, str):
@@ -78,13 +71,19 @@ def _checkPermissions(activate: bool = False) -> bool:
                     set UI_enabled to UI elements enabled
                 end tell
                 return UI_enabled"""
-    proc = subprocess.Popen(['osascript'],  stdin=subprocess.PIPE, stdout=subprocess.PIPE, encoding='utf8')
+    proc = subprocess.Popen(
+        ['osascript'],
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        encoding='utf8')
     ret, err = proc.communicate(cmd)
     ret = ret.replace("\n", "")
     return ret == "true"
 
 
-def _getWindowBox(handle: _macOSNSHandle | _macOSCGHandle, flipValues: bool = False):
+def _getWindowBox(
+        handle: _macOSNSHandle | _macOSCGHandle,
+        flipValues: bool = False):
     if handle.isNSHandle:
         handle = cast("_macOSNSHandle", handle)
         return _NSgetWindowBox(handle.window, flipValues)
@@ -93,7 +92,10 @@ def _getWindowBox(handle: _macOSNSHandle | _macOSCGHandle, flipValues: bool = Fa
         return _CGgetWindowBox(handle.appName, handle.windowTitle)
 
 
-def _moveResizeWindow(handle: _macOSNSHandle | _macOSCGHandle, newBox: Box, flipValues: bool = False):
+def _moveResizeWindow(
+        handle: _macOSNSHandle | _macOSCGHandle,
+        newBox: Box,
+        flipValues: bool = False):
     if handle.isNSHandle:
         handle = cast("_macOSNSHandle", handle)
         _NSmoveResizeTo(handle.window, newBox, flipValues)
@@ -117,8 +119,13 @@ def _CGgetWindowBox(appName: str, title: str) -> Box:
                 end try
                 return appBounds
             end run"""
-    proc = subprocess.Popen(['osascript', '-', appName, title],
-                            stdin=subprocess.PIPE, stdout=subprocess.PIPE, encoding='utf8')
+    proc = subprocess.Popen(['osascript',
+                             '-',
+                             appName,
+                             title],
+                            stdin=subprocess.PIPE,
+                            stdout=subprocess.PIPE,
+                            encoding='utf8')
     ret, err = proc.communicate(cmd)
     if not ret:
         ret = "0, 0, 0, 0"
@@ -144,9 +151,17 @@ def _CGmoveResizeTo(appName: str, title: str, newBox: Box):
                     end tell
                 end try
             end run"""
-    proc = subprocess.Popen(['osascript', '-', appName, title,
-                             str(newBox.left), str(newBox.top), str(newBox.width), str(newBox.height)],
-                            stdin=subprocess.PIPE, stdout=subprocess.PIPE, encoding='utf8')
+    proc = subprocess.Popen(['osascript',
+                             '-',
+                             appName,
+                             title,
+                             str(newBox.left),
+                             str(newBox.top),
+                             str(newBox.width),
+                             str(newBox.height)],
+                            stdin=subprocess.PIPE,
+                            stdout=subprocess.PIPE,
+                            encoding='utf8')
     _, _ = proc.communicate(cmd)
 
 
@@ -176,8 +191,18 @@ def _NSgetWindowBox(window: AppKit.NSWindow, flipValues: bool = False) -> Box:
     return Box(x, y, w, h)
 
 
-def _NSmoveResizeTo(window: AppKit.NSWindow, newBox: Box, flipValues: bool = False):
+def _NSmoveResizeTo(
+        window: AppKit.NSWindow,
+        newBox: Box,
+        flipValues: bool = False):
     newTop = newBox.top
     if flipValues:
         newTop = _unflipTop(window, newBox)
-    window.setFrame_display_animate_(AppKit.NSMakeRect(newBox.left, newTop, newBox.width, newBox.height), True, True)
+    window.setFrame_display_animate_(
+        AppKit.NSMakeRect(
+            newBox.left,
+            newTop,
+            newBox.width,
+            newBox.height),
+        True,
+        True)

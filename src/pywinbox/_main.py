@@ -37,7 +37,7 @@ class Size(NamedTuple):
     height: int
 
 
-def pointInBox(x: int, y: int, box: Box |tuple[int, int, int, int]) -> bool:
+def pointInBox(x: int, y: int, box: Box | tuple[int, int, int, int]) -> bool:
     """
     Check if a point defined by ``(x, y)`` is within the box described by ``(left, top, width, height)``.
 
@@ -46,25 +46,35 @@ def pointInBox(x: int, y: int, box: Box |tuple[int, int, int, int]) -> bool:
     :param box: Box struct (left, top, width, height) or tuple of integers
     :return: ``True`` if the ``(x, y)`` point is within the box described by ``(left, top, width, height)``
     """
-    x1, y1, w1, h1 = box if isinstance(box, tuple) else (box.left, box.top, box.width, box.height)
+    x1, y1, w1, h1 = box if isinstance(
+        box, tuple) else (
+        box.left, box.top, box.width, box.height)
     return x1 <= x <= x1 + w1 and y1 <= y <= y1 + h1
+
+
 collidepoint = pointInBox  # collidepoint is an alias for pointInBox
 
 
-def collidebox(box1: Box | tuple[int, int, int, int], box2: Box | tuple[int, int, int, int]) -> bool:
+def collidebox(box1: Box | tuple[int, int, int, int],
+               box2: Box | tuple[int, int, int, int]) -> bool:
     """
     Check if two Box objects are colliding with each other.
-    
+
     :param box1: first Box struct (left, top, width, height)
     :param box2: second Box struct (left, top, width, height)
     :return: ``True`` if the two Box objects are colliding
     """
-    x1, y1, w1, h1 = box1 if isinstance(box1, tuple) else (box1.left, box1.top, box1.width, box1.height)
-    x2, y2, w2, h2 = box2 if isinstance(box2, tuple) else (box2.left, box2.top, box2.width, box2.height)
+    x1, y1, w1, h1 = box1 if isinstance(
+        box1, tuple) else (
+        box1.left, box1.top, box1.width, box1.height)
+    x2, y2, w2, h2 = box2 if isinstance(
+        box2, tuple) else (
+        box2.left, box2.top, box2.width, box2.height)
     return x1 < x2 + w2 and x1 + w1 > x2 and y1 < y2 + h2 and y1 + h1 > y2
 
 
-def contains(box1: Box | tuple[int, int, int, int], box2: Box | tuple[int, int, int, int]) -> bool:
+def contains(box1: Box | tuple[int, int, int, int],
+             box2: Box | tuple[int, int, int, int]) -> bool:
     """
     Check if box1 is entirely inside box2.
 
@@ -72,12 +82,17 @@ def contains(box1: Box | tuple[int, int, int, int], box2: Box | tuple[int, int, 
     :param box2: second Box struct (left, top, width, height)
     :return: ``True`` if box1 is entirely inside box2
     """
-    x1, y1, w1, h1 = box1 if isinstance(box1, tuple) else (box1.left, box1.top, box1.width, box1.height)
-    x2, y2, w2, h2 = box2 if isinstance(box2, tuple) else (box2.left, box2.top, box2.width, box2.height)
+    x1, y1, w1, h1 = box1 if isinstance(
+        box1, tuple) else (
+        box1.left, box1.top, box1.width, box1.height)
+    x2, y2, w2, h2 = box2 if isinstance(
+        box2, tuple) else (
+        box2.left, box2.top, box2.width, box2.height)
     return x1 >= x2 and x1 + w1 <= x2 + w2 and y1 >= y2 and y1 + h1 <= y2 + h2
 
 
-def clip(box1: Box | tuple[int, int, int, int], box2: Box | tuple[int, int, int, int]) -> Box | None:
+def clip(box1: Box | tuple[int, int, int, int],
+         box2: Box | tuple[int, int, int, int]) -> Box | None:
     """
     Return the intersection between two Box objects, if any.
 
@@ -86,14 +101,18 @@ def clip(box1: Box | tuple[int, int, int, int], box2: Box | tuple[int, int, int,
     :return: intersection Box struct (left, top, width, height) or None if there is no intersection
     """
     if collidebox(box1, box2):
-        x1, y1, w1, h1 = box1 if isinstance(box1, tuple) else (box1.left, box1.top, box1.width, box1.height)
-        x2, y2, w2, h2 = box2 if isinstance(box2, tuple) else (box2.left, box2.top, box2.width, box2.height)
-        return Box(max(x1, x2), max(y1, y2), max(x1, x2) + min(w1, w2), max(y1, y2) + min(h1, h2))
+        x1, y1, w1, h1 = box1 if isinstance(box1, tuple) else (
+            box1.left, box1.top, box1.width, box1.height)
+        x2, y2, w2, h2 = box2 if isinstance(box2, tuple) else (
+            box2.left, box2.top, box2.width, box2.height)
+        return Box(max(x1, x2), max(y1, y2), max(x1, x2) +
+                   min(w1, w2), max(y1, y2) + min(h1, h2))
     else:
         return None
 
 
-def union(box1: Box | tuple[int, int, int, int], box2: Box | tuple[int, int, int, int]) -> Box | None:
+def union(box1: Box | tuple[int, int, int, int],
+          box2: Box | tuple[int, int, int, int]) -> Box | None:
     """
     Return the bounding box (minimal area which contains both) of two Box objects.
 
@@ -112,7 +131,7 @@ def union(box1: Box | tuple[int, int, int, int], box2: Box | tuple[int, int, int
     def onQuery2() -> Box:
         return box2
 
-    def onSet(box :Box) -> None:
+    def onSet(box: Box) -> None:
         pass
 
     # creating a ScreenBox object to take advantage of multi-monitor features
@@ -124,7 +143,8 @@ def union(box1: Box | tuple[int, int, int, int], box2: Box | tuple[int, int, int
     new_w = max(myBox1.right, myBox2.right) - new_x
     new_h = max(myBox1.bottom, myBox2.bottom) - new_y
 
-    # Return new Box; if dimensions are <= 0, rectangles do not overlap or touch validly
+    # Return new Box; if dimensions are <= 0, rectangles do not overlap or
+    # touch validly
     if new_w > 0 and new_h > 0:
         return Box(new_x, new_y, new_w, new_h)
     else:
@@ -135,12 +155,13 @@ def union(box1: Box | tuple[int, int, int, int], box2: Box | tuple[int, int, int
 class BaseClass:
 
     def __init__(self,
-                 handle :_HandleTypeOut = None,
-                 box :Box | None = None,
-                 onQuery :Callable[[], Box] | None = None, onSet :Callable[[Box], None] | None = None) -> None:
+                 handle: _HandleTypeOut = None,
+                 box: Box | None = None,
+                 onQuery: Callable[[], Box] | None = None,
+                 onSet: Callable[[Box], None] | None = None) -> None:
 
-        self._handle :_HandleTypeOut = handle
-        self._box :Box = box or Box(0, 0, 0, 0)
+        self._handle: _HandleTypeOut = handle
+        self._box: Box = box or Box(0, 0, 0, 0)
         self._onQuery: Callable[[], Box] = onQuery or self.onQuery
         self._onSet: Callable[[Box], None] = onSet or self.onSet
         self._clamp: Box | None = None
@@ -156,7 +177,7 @@ class BaseClass:
             self._box = _getWindowBox(self._handle)
         return self._box
 
-    def _clamp_box(self, box :Box, boundary :Box):
+    def _clamp_box(self, box: Box, boundary: Box):
         """
         Clamps a Box entirely inside a boundary.
         Both box and boundary are Box structures (x, y, width, height).
@@ -225,7 +246,11 @@ class BaseClass:
     @left.setter
     def left(self, value: int):
         self._box = self._onQuery()
-        self._box = Box(value, self._box.top, self._box.width, self._box.height)
+        self._box = Box(
+            value,
+            self._box.top,
+            self._box.width,
+            self._box.height)
         self._onSet(self._box)
 
     @property
@@ -236,7 +261,11 @@ class BaseClass:
     @right.setter
     def right(self, value: int):
         self._box = self._onQuery()
-        self._box = Box(value - self._box.width, self._box.top, self._box.width, self._box.height)
+        self._box = Box(
+            value - self._box.width,
+            self._box.top,
+            self._box.width,
+            self._box.height)
         self._onSet(self._box)
 
     @property
@@ -247,7 +276,11 @@ class BaseClass:
     @top.setter
     def top(self, value: int):
         self._box = self._onQuery()
-        self._box = Box(self._box.left, value, self._box.width, self._box.height)
+        self._box = Box(
+            self._box.left,
+            value,
+            self._box.width,
+            self._box.height)
         self._onSet(self._box)
 
     @property
@@ -258,7 +291,11 @@ class BaseClass:
     @bottom.setter
     def bottom(self, value: int):
         self._box = self._onQuery()
-        self._box = Box(self._box.left, value - self._box.height, self._box.width, self._box.height)
+        self._box = Box(
+            self._box.left,
+            value - self._box.height,
+            self._box.width,
+            self._box.height)
         self._onSet(self._box)
 
     @property
@@ -321,13 +358,19 @@ class BaseClass:
     @property
     def rect(self) -> Rect:
         self._box = self._onQuery()
-        return Rect(self._box.left, self._box.top, self._box.left + self._box.width,
-                    self._box.top + self._box.height)
+        return Rect(
+            self._box.left,
+            self._box.top,
+            self._box.left +
+            self._box.width,
+            self._box.top +
+            self._box.height)
 
     @rect.setter
     def rect(self, value: Rect | tuple[int, int, int, int]):
         val: Rect = Rect(*value)
-        self._box = Box(val.left, val.top, abs(val.right - val.left), abs(val.bottom - val.top))
+        self._box = Box(val.left, val.top, abs(
+            val.right - val.left), abs(val.bottom - val.top))
         self._onSet(self._box)
 
     @property
@@ -351,7 +394,12 @@ class BaseClass:
     def bottomleft(self, value: Point | tuple[int, int]):
         val: Point = Point(*value)
         self._box = self._onQuery()
-        self._box = Box(val.x, val.y - self._box.height, self._box.width, self._box.height)
+        self._box = Box(
+            val.x,
+            val.y -
+            self._box.height,
+            self._box.width,
+            self._box.height)
         self._onSet(self._box)
 
     @property
@@ -363,19 +411,32 @@ class BaseClass:
     def topright(self, value: Point | tuple[int, int]):
         val: Point = Point(*value)
         self._box = self._onQuery()
-        self._box = Box(val.x - self._box.width, val.y, self._box.width, self._box.height)
+        self._box = Box(
+            val.x -
+            self._box.width,
+            val.y,
+            self._box.width,
+            self._box.height)
         self._onSet(self._box)
 
     @property
     def bottomright(self) -> Point:
         self._box = self._onQuery()
-        return Point(self._box.left + self._box.width, self._box.top + self._box.height)
+        return Point(
+            self._box.left +
+            self._box.width,
+            self._box.top +
+            self._box.height)
 
     @bottomright.setter
     def bottomright(self, value: Point | tuple[int, int]):
         val: Point = Point(*value)
         self._box = self._onQuery()
-        self._box = Box(val.x - self._box.width, val.y - self._box.height, self._box.width, self._box.height)
+        self._box = Box(
+            val.x - self._box.width,
+            val.y - self._box.height,
+            self._box.width,
+            self._box.height)
         self._onSet(self._box)
 
     @property
@@ -387,19 +448,22 @@ class BaseClass:
     def midtop(self, value: Point | tuple[int, int]):
         val: Point = Point(*value)
         self._box = self._onQuery()
-        self._box = Box(val.x - (self._box.width // 2), val.y, self._box.width, self._box.height)
+        self._box = Box(val.x - (self._box.width // 2), val.y,
+                        self._box.width, self._box.height)
         self._onSet(self._box)
 
     @property
     def midbottom(self) -> Point:
         self._box = self._onQuery()
-        return Point(self._box.left + (self._box.width // 2), self._box.top + self._box.height)
+        return Point(self._box.left + (self._box.width // 2),
+                     self._box.top + self._box.height)
 
     @midbottom.setter
     def midbottom(self, value: Point | tuple[int, int]):
         val: Point = Point(*value)
         self._box = self._onQuery()
-        self._box = Box(val.x - (self._box.width // 2), val.y - self._box.height, self._box.width, self._box.height)
+        self._box = Box(val.x - (self._box.width // 2), val.y -
+                        self._box.height, self._box.width, self._box.height)
         self._onSet(self._box)
 
     @property
@@ -411,31 +475,40 @@ class BaseClass:
     def midleft(self, value: Point | tuple[int, int]):
         val: Point = Point(*value)
         self._box = self._onQuery()
-        self._box = Box(val.x, val.y - (self._box.height // 2), self._box.width, self._box.height)
+        self._box = Box(val.x, val.y - (self._box.height // 2),
+                        self._box.width, self._box.height)
         self._onSet(self._box)
 
     @property
     def midright(self) -> Point:
         self._box = self._onQuery()
-        return Point(self._box.left + self._box.width, self._box.top + (self._box.height // 2))
+        return Point(self._box.left + self._box.width,
+                     self._box.top + (self._box.height // 2))
 
     @midright.setter
     def midright(self, value: Point | tuple[int, int]):
         val: Point = Point(*value)
         self._box = self._onQuery()
-        self._box = Box(val.x - self._box.width, val.y - (self._box.height // 2), self._box.width, self._box.height)
+        self._box = Box(val.x - self._box.width,
+                        val.y - (self._box.height // 2),
+                        self._box.width,
+                        self._box.height)
         self._onSet(self._box)
 
     @property
     def center(self) -> Point:
         self._box = self._onQuery()
-        return Point(self._box.left + (self._box.width // 2), self._box.top + (self._box.height // 2))
+        return Point(self._box.left + (self._box.width // 2),
+                     self._box.top + (self._box.height // 2))
 
     @center.setter
     def center(self, value: Point | tuple[int, int]):
         val: Point = Point(*value)
         self._box = self._onQuery()
-        self._box = Box(val.x - (self._box.width // 2), val.y - (self._box.height // 2), self._box.width, self._box.height)
+        self._box = Box(val.x - (self._box.width // 2),
+                        val.y - (self._box.height // 2),
+                        self._box.width,
+                        self._box.height)
         self._onSet(self._box)
 
     @property
@@ -446,7 +519,8 @@ class BaseClass:
     @centerx.setter
     def centerx(self, value: int):
         self._box = self._onQuery()
-        self._box = Box(value - (self._box.width // 2), self._box.top, self._box.width, self._box.height)
+        self._box = Box(value - (self._box.width // 2),
+                        self._box.top, self._box.width, self._box.height)
         self._onSet(self._box)
 
     @property
@@ -457,7 +531,10 @@ class BaseClass:
     @centery.setter
     def centery(self, value: int):
         self._box = self._onQuery()
-        self._box = Box(self._box.left, value - (self._box.height // 2), self._box.width, self._box.height)
+        self._box = Box(self._box.left,
+                        value - (self._box.height // 2),
+                        self._box.width,
+                        self._box.height)
         self._onSet(self._box)
 
     def collidepoint(self, x: int, y: int) -> bool:
@@ -520,7 +597,9 @@ class BaseClass:
         :return: resultant Box struct (left, top, width, height)
         """
         self._box = self._onQuery()
-        self._box.position = (self._box.position[0] + dx, self._box.position[1] + dy)
+        self._box.position = (
+            self._box.position[0] + dx,
+            self._box.position[1] + dy)
         return self._box
 
     def inflate(self, dw: float, dh: float) -> Box:
@@ -537,7 +616,8 @@ class BaseClass:
         :return: resultant Box struct (left, top, width, height)
         """
         self._box = self._onQuery()
-        self._box.size = (int(self._box.size[0] * dw), int(self._box.size[1] * dh))
+        self._box.size = (
+            int(self._box.size[0] * dw), int(self._box.size[1] * dh))
         return self._box
 
     def clamp(self, boundary: Box | tuple[int, int, int, int]) -> None:
@@ -580,9 +660,8 @@ class BaseClass:
 
 class PyWinBox(BaseClass):
 
-    def __init__(self,
-                 onQuery: Callable[[], Box] | None = None, onSet: Callable[[Box], None] | None = None,
-                 handle :_HandleTypeIn = None) -> None:
+    def __init__(self, onQuery: Callable[[], Box] | None = None, onSet: Callable[[
+                 Box], None] | None = None, handle: _HandleTypeIn = None) -> None:
         """
         THIS CLASS IS FOR RETRO-COMPATIBILITY ONLY. Use WindowBox (window area) or ScreenBox (rectangular area) instead.
 
@@ -624,10 +703,13 @@ class PyWinBox(BaseClass):
 
         It can raise ValueError if no parameters or not valid window handle are passed
         """
-        warnings.warn('PyWinBox class is deprecated. Use WindowBox (window area) or ScreenBox (rectangular area) instead',
-                      DeprecationWarning, stacklevel=2)
+        warnings.warn(
+            'PyWinBox class is deprecated. Use WindowBox (window area) or ScreenBox (rectangular area) instead',
+            DeprecationWarning,
+            stacklevel=2)
         try:
-            newHandle: _HandleTypeOut = _getHandle(handle) if handle is not None else None
+            newHandle: _HandleTypeOut = _getHandle(
+                handle) if handle is not None else None
         except Exception:
             newHandle = None
         if newHandle is None and (onSet is None or onQuery is None):
@@ -638,8 +720,11 @@ class PyWinBox(BaseClass):
 class WindowBox(BaseClass):
 
     def __init__(self,
-                 handle :_HandleTypeIn,
-                 onQuery: Callable[[], Box] | None = None, onSet: Callable[[Box], None] | None = None) -> None:
+                 handle: _HandleTypeIn,
+                 onQuery: Callable[[],
+                                   Box] | None = None,
+                 onSet: Callable[[Box],
+                                 None] | None = None) -> None:
         """
         Class to access all window box properties.
 
@@ -681,9 +766,8 @@ class WindowBox(BaseClass):
 
 class ScreenBox(BaseClass):
 
-    def __init__(self,
-                 box: Box | tuple[int, int, int, int],
-                 onQuery: Callable[[], Box], onSet: Callable[[Box], None]) -> None:
+    def __init__(self, box: Box | tuple[int, int, int, int], onQuery: Callable[[
+    ], Box], onSet: Callable[[Box], None]) -> None:
         """
         Class to access all area box properties.
 
@@ -694,8 +778,8 @@ class ScreenBox(BaseClass):
 
         It can raise ValueError if wrong parameters are passed.
         """
-        if ((not isinstance(box, Box) and (not isinstance(box, tuple) or (isinstance(box, tuple) and len(box) != 4)))
-                or not callable(onQuery) or not callable(onSet)):
+        if ((not isinstance(box, Box) and (not isinstance(box, tuple) or (isinstance(
+                box, tuple) and len(box) != 4))) or not callable(onQuery) or not callable(onSet)):
             raise ValueError
         if not isinstance(box, Box):
             box = Box(*box)
@@ -703,15 +787,31 @@ class ScreenBox(BaseClass):
 
 
 if sys.platform == "darwin":
-    from ._pywinbox_macos import (_getHandle, _getWindowBox, _moveResizeWindow, _HandleTypeIn, _HandleTypeOut)
+    from ._pywinbox_macos import (
+        _getHandle,
+        _getWindowBox,
+        _moveResizeWindow,
+        _HandleTypeIn,
+        _HandleTypeOut)
 
 elif sys.platform == "win32":
-    from ._pywinbox_win import (_getHandle, _getWindowBox, _moveResizeWindow, _HandleTypeIn, _HandleTypeOut)
+    from ._pywinbox_win import (
+        _getHandle,
+        _getWindowBox,
+        _moveResizeWindow,
+        _HandleTypeIn,
+        _HandleTypeOut)
 
 elif sys.platform == "linux":
-    from ._pywinbox_linux import (_getHandle, _getWindowBox, _moveResizeWindow, _HandleTypeIn, _HandleTypeOut)
+    from ._pywinbox_linux import (
+        _getHandle,
+        _getWindowBox,
+        _moveResizeWindow,
+        _HandleTypeIn,
+        _HandleTypeOut)
 
 else:
-    raise NotImplementedError('PyWinBox currently does not support this platform. If you think you can help, please contribute! https://github.com/Kalmat/PyWinBox')
+    raise NotImplementedError(
+        'PyWinBox currently does not support this platform. If you think you can help, please contribute! https://github.com/Kalmat/PyWinBox')
 _HandleTypeIn = _HandleTypeIn
 _HandleTypeOut = _HandleTypeOut
