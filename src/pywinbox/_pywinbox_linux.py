@@ -9,14 +9,10 @@ import os
 
 from ._main import Box
 
-try:
+from typing import Union, TYPE_CHECKING
+if TYPE_CHECKING:
     # TypeAlias does not exist in typing for Python3.9
-    from typing import TypeAlias
-except Exception:
-    from typing import TYPE_CHECKING
-    if TYPE_CHECKING:
-        from typing_extensions import TypeAlias
-from typing import Union
+    from typing_extensions import TypeAlias
 
 from Xlib.xobject.drawable import Window as XWindow
 from ewmhlib import EwmhWindow
